@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+  <meta name="theme-color" content="#1a1a1e" id="theme-meta"/>
+  <meta name="description" content="Cré·8 — Content-driven design creator. Anyone can be a designer."/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Cré·8"/>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png"/>
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-16.png"/>
+
+  <!-- Fonts: preconnect first, then load -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400&family=DM+Mono:wght@400;500&family=Nunito:wght@400;500;600;700;800&display=swap"/>
+
+  <!-- App styles -->
+  <link rel="stylesheet" href="css/style.css"/>
+
+  <title>Cré·8 — Design Creator</title>
+</head>
+<body>
+
+<div id="splash">
+  <div class="sp-mark">C</div>
+  <div class="sp-name">Cr<em>é</em>·8</div>
+  <div class="sp-tag">Anyone can be a designer.</div>
+</div>
+
+<div id="shell">
+
+  <!-- ── TOPBAR ── -->
+  <header id="topbar">
+    <div class="logo">Cr<span class="logo-dot">é</span>·<span class="logo-8">8</span></div>
+    <span class="t-fname" id="fname" contenteditable="true" spellcheck="false">Untitled_Project</span>
+    <div class="tsep"></div>
+    <div class="tools">
+      <button class="tbtn on" data-t="select">
+        <svg viewBox="0 0 24 24"><path d="M5 3l14 9-7 2-4 7L5 3z" fill="currentColor" stroke="none"/></svg>
+        Select
+      </button>
+      <button class="tbtn" data-t="text">
+        <svg viewBox="0 0 24 24"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
+        Text
+      </button>
+      <button class="tbtn" data-t="shape">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+        Shape
+      </button>
+      <button class="tbtn" data-t="img">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" stroke="none"/><path d="M21 15l-5-5L5 21"/></svg>
+        Image
+      </button>
+    </div>
+    <div class="tsep"></div>
+    <div class="bar-r">
+      <span class="badge" id="status-badge">SETUP</span>
+      <button class="btn-theme" id="btn-theme" title="Toggle light/dark">🌙</button>
+      <button class="btn-gen" id="btn-gen" disabled>▶ Generate</button>
+      <button class="btn-sec" id="btn-exp" disabled>↓ Export PNG</button>
+    </div>
+  </header>
+
+  <!-- ── LEFT PANEL ── -->
+  <div id="left">
+    <div class="resize-handle" id="rh-left"></div>
+    <div class="ptabs">
+      <button class="ptab on" data-tab="setup">Setup</button>
+      <button class="ptab" data-tab="layers">Layers</button>
+      <button class="ptab" data-tab="pages">Pages</button>
+    </div>
+
+    <!-- SETUP TAB -->
+    <div class="pbody" id="tab-setup">
+
+      <!-- STEP 1: Category -->
+      <div class="step visible" id="step-cat">
+        <div class="step-head">
+          <div class="step-head-num">1</div>
+          <div class="step-head-info">
+            <div class="step-title">What are you making?</div>
+            <div class="step-sub">Choose the world your design lives in.</div>
+          </div>
+        </div>
+        <div class="step-body">
+          <div class="cat-grid" id="cat-grid"></div>
+        </div>
+      </div>
+
+      <!-- STEP 2: Format -->
+      <div class="step" id="step-type">
+        <div class="step-head">
+          <div class="step-head-num">2</div>
+          <div class="step-head-info">
+            <div class="step-title" id="step-type-title">Choose a format</div>
+            <div class="step-sub">Select the specific document type.</div>
+          </div>
+        </div>
+        <div class="step-body">
+          <div class="type-grid" id="type-grid"></div>
+        </div>
+      </div>
+
+      <!-- STEP 3: Size -->
+      <div class="step" id="step-size">
+        <div class="step-head">
+          <div class="step-head-num">3</div>
+          <div class="step-head-info">
+            <div class="step-title">Pick a size</div>
+            <div class="step-sub">Size shapes spacing and layout. Choose what fits your use.</div>
+          </div>
+        </div>
+        <div class="step-body">
+          <div class="size-grid" id="size-grid"></div>
+          <div class="custom-size-row" id="csr">
+            <div class="csr-label">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              Custom dimensions
+            </div>
+            <div class="csr-inputs">
+              <input class="dim-inp" type="number" id="cdw" placeholder="W" min="1"/>
+              <span class="dim-x">×</span>
+              <input class="dim-inp" type="number" id="cdh" placeholder="H" min="1"/>
+              <select class="dim-unit" id="cdu">
+                <option value="mm">mm</option>
+                <option value="in">in</option>
+                <option value="px">px</option>
+                <option value="cm">cm</option>
+                <option value="ft">ft</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4: Intent -->
+      <div class="step" id="step-intent">
+        <div class="step-head">
+          <div class="step-head-num">4</div>
+          <div class="step-head-info">
+            <div class="step-title">What's it for?</div>
+            <div class="step-sub">This shapes tone, hierarchy, and layout direction.</div>
+          </div>
+        </div>
+        <div class="step-body">
+          <div class="intent-grid" id="intent-grid"></div>
+        </div>
+      </div>
+
+      <!-- STEP 5: Your Stuff -->
+      <div class="step" id="step-stuff">
+        <div class="step-head">
+          <div class="step-head-num">5</div>
+          <div class="step-head-info">
+            <div class="step-title">Add your content</div>
+            <div class="step-sub">Image, colors, or text — add at least one. More is better.</div>
+          </div>
+        </div>
+        <div class="step-body">
+          <div class="stuff-cards">
+
+            <!-- Images -->
+            <div class="sc" id="sc-img">
+              <div class="sc-head">
+                <span class="sc-ico">🖼️</span>
+                <div class="sc-info">
+                  <div class="sc-title">Images</div>
+                  <div class="sc-status" id="img-status">Drop a photo or paste a URL</div>
+                </div>
+                <span class="sc-arr">›</span>
+              </div>
+              <div class="sc-body">
+                <div class="dz" id="dz">
+                  <div class="dz-ico">↑</div>
+                  <div class="dz-t">Drop image or click to browse</div>
+                  <div class="dz-s">PNG · JPG · WEBP · SVG</div>
+                  <input type="file" id="fi" accept="image/*" multiple style="display:none"/>
+                </div>
+                <div class="url-row">
+                  <input type="text" id="url-inp" placeholder="Or paste an image URL…"/>
+                  <button class="url-btn" id="url-btn">Load</button>
+                </div>
+                <div class="img-grid" id="img-grid"></div>
+              </div>
+            </div>
+
+            <!-- Colors -->
+            <div class="sc" id="sc-col">
+              <div class="sc-head">
+                <span class="sc-ico">🎨</span>
+                <div class="sc-info">
+                  <div class="sc-title">Colors</div>
+                  <div class="sc-status" id="col-status">Pick a palette — or we'll pull from your images</div>
+                </div>
+                <span class="sc-arr">›</span>
+              </div>
+              <div class="sc-body">
+                <div class="pal-grid" id="pal-grid"></div>
+                <div class="custom-colors-label">Custom colors</div>
+                <div class="custom-color-row" id="ccr">
+                  <button class="add-col-btn" id="add-col">+</button>
+                </div>
+                <div id="extracted-note" style="display:none">
+                  <span>✦</span><span>Palette suggested from your image</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Text -->
+            <div class="sc" id="sc-txt">
+              <div class="sc-head">
+                <span class="sc-ico">✏️</span>
+                <div class="sc-info">
+                  <div class="sc-title">Content</div>
+                  <div class="sc-status" id="txt-status">Paste anything — we'll sort it out</div>
+                </div>
+                <span class="sc-arr">›</span>
+              </div>
+              <div class="sc-body">
+                <textarea class="magic-ta" id="magic-ta" rows="4"
+                  placeholder="Paste your text — event details, a menu, your bio, product copy. Cré·8 reads it and figures out what's a title, what's a date, what's body copy."></textarea>
+                <div class="magic-hint">✦ Magic Parse identifies titles, headings, dates, lists automatically.</div>
+                <button class="parse-btn" id="parse-btn" style="display:none"><span>✦</span> Parse content</button>
+                <div id="parsed-out" style="display:none"></div>
+              </div>
+            </div>
+
+          </div><!-- /stuff-cards -->
+
+          <!-- Unlock strip -->
+          <div class="unlock-strip">
+            <div class="u-dots">
+              <div class="u-dot" id="ud-img" title="Images"></div>
+              <div class="u-dot" id="ud-col" title="Colors"></div>
+              <div class="u-dot" id="ud-txt" title="Text"></div>
+            </div>
+            <div class="u-txt" id="u-txt">Add at least one to unlock Generate</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /tab-setup -->
+
+    <!-- LAYERS TAB -->
+    <div style="display:none;flex:1;overflow-y:auto;flex-direction:column" id="tab-layers"></div>
+
+    <!-- PAGES TAB -->
+    <div style="display:none;flex-direction:column;padding:12px 14px;gap:0;flex:1;overflow-y:auto" id="tab-pages">
+      <div id="pages-list">
+        <div class="page-item on"><span>📄</span><span style="flex:1">Page 1</span></div>
+      </div>
+      <button class="add-pg-btn" id="add-pg">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        Add page
+      </button>
+    </div>
+  </div><!-- /left -->
+
+  <!-- ── CANVAS ── -->
+  <div id="canvas-area">
+    <div id="cw">
+      <canvas id="canvas-el" width="1" height="1" style="opacity:0"></canvas>
+      <div class="canvas-ph" id="canvas-ph">
+        <div class="ph-ico">▭</div>
+        <div class="ph-txt">Choose a format above<br>then hit <strong>▶ Generate</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RIGHT PANEL ── -->
+  <div id="right">
+    <div class="resize-handle-r" id="rh-right"></div>
+    <div class="r-head">Document</div>
+    <div class="r-body">
+      <div class="r-sec">
+        <div class="r-slbl">Info</div>
+        <div class="di-row"><span class="dk">file</span><span class="dv" id="di-file">—</span></div>
+        <div class="di-row"><span class="dk">type</span><span class="dv" id="di-type">—</span></div>
+        <div class="di-row"><span class="dk">size</span><span class="dv" id="di-size">—</span></div>
+        <div class="di-row"><span class="dk">pages</span><span class="dv" id="di-pages">1</span></div>
+        <div class="di-row"><span class="dk">intent</span><span class="dv" id="di-intent">—</span></div>
+      </div>
+      <div class="hint-card" id="hint-card">
+        Complete <strong>Format</strong>, <strong>Size</strong>, and add at least one piece of content — then click <strong>▶ Generate</strong>.
+      </div>
+      <div class="r-sec" id="props-sec" style="display:none">
+        <div class="r-slbl">Selection</div>
+        <div class="prop2">
+          <div class="prop-row"><span class="pk">X</span><input class="pv-inp" type="number" value="0"/></div>
+          <div class="prop-row"><span class="pk">Y</span><input class="pv-inp" type="number" value="0"/></div>
+        </div>
+        <div class="prop2">
+          <div class="prop-row"><span class="pk">W</span><input class="pv-inp" type="number" value="0"/></div>
+          <div class="prop-row"><span class="pk">H</span><input class="pv-inp" type="number" value="0"/></div>
+        </div>
+        <div class="prop-row" style="margin-top:2px">
+          <span class="pk" style="width:auto;margin-right:6px">opacity</span>
+          <input class="pv-inp" type="number" value="100" min="0" max="100"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /shell -->
+
+<!-- ROLE MODAL -->
+<div class="modal-bg" id="role-modal">
+  <div class="modal">
+    <div class="modal-ttl">How should this image be used?</div>
+    <div class="modal-img"><img id="role-img" src="" alt=""/></div>
+    <div class="ro-opts">
+      <div class="ro" data-r="focal"><span class="ro-ico">🎯</span><div><div class="ro-name">Focal Point</div><div class="ro-desc">The hero — featured prominently</div></div></div>
+      <div class="ro" data-r="background"><span class="ro-ico">🌅</span><div><div class="ro-name">Background</div><div class="ro-desc">Fills the canvas behind content</div></div></div>
+      <div class="ro" data-r="support"><span class="ro-ico">🖼️</span><div><div class="ro-name">Supporting</div><div class="ro-desc">Secondary or accent image</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TOASTS -->
+<div id="toasts"></div>
+
+<!-- App script -->
+<script src="js/app.js"></script>
+
+<!-- Service Worker registration -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('[Cré·8] SW registered:', reg.scope))
+        .catch(err => console.warn('[Cré·8] SW registration failed:', err));
+    });
+  }
+</script>
+
+</body>
+</html>
