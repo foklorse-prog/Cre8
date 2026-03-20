@@ -1,29 +1,434 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
-  <meta name="theme-color" content="#1a1a1e" id="theme-meta"/>
-  <meta name="description" content="Cré·8 — Content-driven design creator. Anyone can be a designer."/>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-  <meta name="apple-mobile-web-app-title" content="Cré·8"/>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<meta name="theme-color" content="#1a1a1e"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="Cré·8"/>
+<meta name="description" content="Cré·8 — Content-driven design creator. Anyone can be a designer."/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&family=Nunito:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&family=Lato:wght@300;400;700&family=Raleway:wght@400;600;700&family=Merriweather:wght@300;400;700&family=Josefin+Sans:wght@300;400;600&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet"/>
+<title>Cré·8 — Design Creator</title>
+<style>
+/* ═══════════════════════════════
+   TOKENS
+═══════════════════════════════ */
+:root{
+  --bg:#1a1a1e;--surf:#212126;--surf2:#28282f;--surf3:#313139;
+  --b1:#35353f;--b2:#42424e;--b3:#52526a;
+  --dim:#55556a;--mid:#80809a;--soft:#aaaac0;--txt:#e8e8f0;--bright:#fff;
+  --acc:#7c6af5;--acc2:#6455d4;--acc-s:rgba(124,106,245,.13);--acc-b:rgba(124,106,245,.26);
+  --grn:#3dd68c;--grn-s:rgba(61,214,140,.11);
+  --ylw:#f5c842;--red:#f55a5a;--blu:#4090f0;
+  --cv:#131316;--dot:#252530;--shad:rgba(0,0,0,.5);
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Nunito',system-ui,sans-serif;
+  --mono:'DM Mono',monospace;
+  --r:7px;--rl:12px;--rxl:18px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --spring:cubic-bezier(.34,1.56,.64,1);
+}
+[data-theme="light"]{
+  --bg:#f0eff5;--surf:#fff;--surf2:#f5f4fa;--surf3:#eceaf5;
+  --b1:#dddbe8;--b2:#cccae0;--b3:#aaa8c0;
+  --dim:#aaa8c0;--mid:#8886a8;--soft:#666480;--txt:#1e1c30;--bright:#0a091e;
+  --acc:#7c6af5;--acc2:#6455d4;--acc-s:rgba(124,106,245,.09);--acc-b:rgba(124,106,245,.2);
+  --grn:#24a86a;--grn-s:rgba(36,168,106,.09);
+  --ylw:#c49a00;--red:#d44444;
+  --cv:#e4e2ee;--dot:#d0cee0;--shad:rgba(0,0,0,.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;font-family:var(--sans);font-size:13px;line-height:1.5;color:var(--txt);background:var(--bg);transition:background .25s,color .25s}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px}
+input,textarea,select,button{font-family:var(--sans);font-size:13px}
+button{cursor:pointer}
 
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json"/>
-  <link rel="apple-touch-icon" href="icons/icon-192.png"/>
-  <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png"/>
-  <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-16.png"/>
+/* ═══════════════════════════════
+   SHELL
+═══════════════════════════════ */
+#shell{display:grid;grid-template-rows:46px 1fr;grid-template-columns:var(--lw,300px) 1fr var(--rw,220px);height:100vh;width:100vw;overflow:hidden}
 
-  <!-- Fonts: preconnect first, then load -->
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400&family=DM+Mono:wght@400;500&family=Nunito:wght@400;500;600;700;800&display=swap"/>
+/* ═══════════════════════════════
+   TOPBAR
+═══════════════════════════════ */
+#bar{grid-column:1/-1;background:var(--surf);border-bottom:1px solid var(--b1);display:flex;align-items:center;padding:0 14px;gap:4px;z-index:100;user-select:none}
+.logo{font-family:var(--serif);font-size:22px;font-weight:600;color:var(--txt);letter-spacing:-.02em;padding-right:14px;border-right:1px solid var(--b1);margin-right:6px;flex-shrink:0;cursor:default;display:flex;align-items:baseline;gap:1px}
+.logo em{color:var(--acc);font-style:italic}
+.logo-8{color:var(--acc);font-size:18px;font-weight:700}
+.fname{font-family:var(--mono);font-size:11px;color:var(--mid);padding:3px 7px;border-radius:5px;border:1px solid transparent;cursor:text;outline:none;transition:.15s;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fname:hover{border-color:var(--b2);color:var(--soft)}
+.fname:focus{border-color:var(--acc);color:var(--txt);background:var(--surf2)}
+.bsep{width:1px;height:18px;background:var(--b1);margin:0 8px;flex-shrink:0}
+.tools{display:flex;gap:2px}
+.tb{height:28px;min-width:28px;padding:0 9px;background:transparent;border:none;border-radius:5px;color:var(--mid);display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;transition:.15s;white-space:nowrap}
+.tb:hover{background:var(--surf2);color:var(--txt)}
+.tb.on{background:var(--surf3);color:var(--txt)}
+.tb svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.bar-r{margin-left:auto;display:flex;align-items:center;gap:7px}
+.badge{font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.07em;padding:2px 7px;border-radius:4px;background:var(--surf2);border:1px solid var(--b1)}
+.badge.live{border-color:var(--grn);color:var(--grn);background:var(--grn-s)}
+.btn-theme{width:28px;height:28px;border-radius:5px;background:var(--surf2);border:1px solid var(--b1);color:var(--mid);display:flex;align-items:center;justify-content:center;font-size:14px;transition:.15s}
+.btn-theme:hover{color:var(--txt);border-color:var(--b2)}
+.btn-refine{height:28px;padding:0 12px;background:var(--surf2);color:var(--soft);border:1px solid var(--b2);border-radius:6px;font-size:12px;font-weight:600;transition:.15s;display:none;align-items:center;gap:5px}
+.btn-refine.show{display:flex}
+.btn-refine:hover{color:var(--txt);border-color:var(--mid)}
+.btn-exp{height:28px;padding:0 12px;background:var(--surf2);color:var(--soft);border:1px solid var(--b2);border-radius:6px;font-size:12px;font-weight:600;transition:.15s}
+.btn-exp:hover{color:var(--txt);border-color:var(--mid)}
+.btn-exp:disabled{opacity:.3;cursor:default}
 
-  <!-- App styles -->
-  <link rel="stylesheet" href="css/style.css"/>
+/* ═══════════════════════════════
+   LEFT PANEL
+═══════════════════════════════ */
+#left{background:var(--surf);border-right:1px solid var(--b1);display:flex;flex-direction:column;overflow:hidden;min-width:220px;max-width:520px;position:relative}
+.rh{position:absolute;right:-3px;top:0;bottom:0;width:6px;cursor:col-resize;z-index:20;display:flex;align-items:center;justify-content:center}
+.rh::after{content:'';width:2px;height:32px;background:var(--b2);border-radius:1px;transition:.2s}
+.rh:hover::after,.rh.dragging::after{background:var(--acc);height:48px}
+.rh-r{position:absolute;left:-3px;top:0;bottom:0;width:6px;cursor:col-resize;z-index:20;display:flex;align-items:center;justify-content:center}
+.rh-r::after{content:'';width:2px;height:32px;background:var(--b2);border-radius:1px;transition:.2s}
+.rh-r:hover::after,.rh-r.dragging::after{background:var(--acc);height:48px}
+.ptabs{display:flex;border-bottom:1px solid var(--b1);flex-shrink:0}
+.ptab{flex:1;height:34px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--dim);font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;transition:.15s}
+.ptab:hover{color:var(--soft)}
+.ptab.on{color:var(--txt);border-bottom-color:var(--acc)}
+.pbody{flex:1;overflow-y:auto;display:flex;flex-direction:column}
 
-  <title>Cré·8 — Design Creator</title>
+/* ═══════════════════════════════
+   ACCORDION STEPS
+═══════════════════════════════ */
+.step{border-bottom:1px solid var(--b1);opacity:0;transform:translateY(6px);transition:opacity .3s var(--ease),transform .3s var(--ease);pointer-events:none}
+.step.visible{opacity:1;transform:none;pointer-events:all}
+
+/* Collapsed summary state */
+.step-summary{display:none;padding:10px 14px;cursor:pointer;transition:background .15s;align-items:center;gap:10px}
+.step-summary:hover{background:var(--surf2)}
+.step.collapsed .step-summary{display:flex}
+.step.collapsed .step-inner{display:none}
+.ss-num{width:18px;height:18px;border-radius:50%;background:var(--grn);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ss-num svg{width:9px;height:9px;stroke:#fff;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.ss-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.ss-label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.ss-preview{font-size:12px;color:var(--txt);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ss-toggle{font-size:16px;color:var(--dim);line-height:1;transition:transform .2s;flex-shrink:0}
+.step.collapsed:hover .ss-toggle{color:var(--soft)}
+
+/* Open state */
+.step-inner{display:flex;flex-direction:column}
+.step-head{padding:12px 14px 0;display:flex;align-items:flex-start;gap:9px}
+.shn{width:20px;height:20px;border-radius:50%;background:var(--surf2);border:1.5px solid var(--b2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;color:var(--dim);flex-shrink:0;margin-top:1px;transition:.3s}
+.step-title{font-size:12px;font-weight:700;color:var(--txt);margin-bottom:2px}
+.step-sub{font-size:11px;color:var(--dim);line-height:1.5}
+.step-body{padding:10px 14px 14px;display:flex;flex-direction:column;gap:9px}
+
+/* ═══════════════════════════════
+   CAT CARDS
+═══════════════════════════════ */
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.cat-card{background:var(--surf2);border:1.5px solid var(--b1);border-radius:var(--rl);overflow:hidden;cursor:pointer;transition:all .2s var(--ease);position:relative}
+.cat-card:hover{border-color:var(--b2);transform:translateY(-1px)}
+.cat-card.on{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc-b)}
+.cat-prev{width:100%;height:64px;background:var(--surf3);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.cat-prev svg{width:88%;height:88%;opacity:.65;transition:.2s}
+.cat-card:hover .cat-prev svg,.cat-card.on .cat-prev svg{opacity:1}
+.cat-foot{padding:6px 9px;display:flex;align-items:center;gap:5px}
+.cat-ico{font-size:12px}
+.cat-name{font-size:11px;font-weight:700;color:var(--txt)}
+.cat-card.on .cat-name{color:var(--acc)}
+.sel-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--acc);opacity:0;transform:scale(0);transition:.2s var(--spring)}
+.cat-card.on .sel-dot{opacity:1;transform:scale(1)}
+
+/* ═══════════════════════════════
+   TYPE / SIZE / INTENT CHIPS
+═══════════════════════════════ */
+.chip-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.chip{background:var(--surf2);border:1.5px solid var(--b1);border-radius:var(--r);padding:8px 10px;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:7px;position:relative}
+.chip:hover{border-color:var(--b2)}
+.chip.on{border-color:var(--acc);background:var(--acc-s)}
+.chip-dot{position:absolute;top:5px;right:5px;width:5px;height:5px;border-radius:50%;background:var(--acc);opacity:0;transition:.15s}
+.chip.on .chip-dot{opacity:1}
+.ch-ico{font-size:15px;flex-shrink:0}
+.ch-name{font-size:11px;font-weight:700;color:var(--txt);display:block}
+.ch-dim{font-family:var(--mono);font-size:9px;color:var(--dim);display:block}
+.chip.on .ch-dim{color:var(--soft)}
+
+/* Size cards */
+.size-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.sz-card{background:var(--surf2);border:1.5px solid var(--b1);border-radius:var(--r);padding:9px 10px;cursor:pointer;transition:.15s;display:flex;flex-direction:column;gap:5px;align-items:center;position:relative}
+.sz-card:hover{border-color:var(--b2)}
+.sz-card.on{border-color:var(--acc);background:var(--acc-s)}
+.sz-prev{display:flex;align-items:center;justify-content:center;height:42px;width:100%}
+.sz-rect{background:var(--surf3);border:1.5px solid var(--b2);border-radius:2px;transition:.15s}
+.sz-card.on .sz-rect{background:var(--acc-b);border-color:var(--acc)}
+.sz-name{font-size:10px;font-weight:700;color:var(--txt);text-align:center;width:100%}
+.sz-dims{font-family:var(--mono);font-size:9px;color:var(--dim);text-align:center;width:100%}
+.sz-ctx{font-size:9px;color:var(--mid);text-align:center;width:100%;line-height:1.4}
+.sz-card.on .sz-dims,.sz-card.on .sz-ctx{color:var(--soft)}
+.sz-dot{position:absolute;top:5px;right:5px;width:5px;height:5px;border-radius:50%;background:var(--acc);opacity:0;transition:.15s}
+.sz-card.on .sz-dot{opacity:1}
+/* Custom size */
+.csr{background:var(--surf2);border:1.5px dashed var(--b2);border-radius:var(--r);padding:8px 10px;display:flex;align-items:center;gap:5px;cursor:pointer;transition:.15s}
+.csr:hover{border-color:var(--mid)}
+.csr.open{border-style:solid;border-color:var(--acc);cursor:default}
+.csr-lbl{font-size:11px;color:var(--mid);flex:1;display:flex;align-items:center;gap:5px}
+.csr-inp{display:none;gap:5px;align-items:center;flex:1}
+.csr.open .csr-inp{display:flex}
+.csr.open .csr-lbl{display:none}
+.di{width:60px;background:var(--surf3);border:1px solid var(--b2);border-radius:4px;color:var(--txt);font-family:var(--mono);font-size:11px;padding:4px 6px;text-align:center;outline:none}
+.di:focus{border-color:var(--acc)}
+.dx{font-size:12px;color:var(--dim);flex-shrink:0}
+.du{width:50px;background:var(--surf3);border:1px solid var(--b2);border-radius:4px;color:var(--txt);font-family:var(--mono);font-size:11px;padding:4px 3px;outline:none}
+.du:focus{border-color:var(--acc)}
+
+/* Intent chips single col */
+.intent-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.int-chip{background:var(--surf2);border:1.5px solid var(--b1);border-radius:var(--r);padding:7px 9px;cursor:pointer;transition:.15s;font-size:11px;font-weight:600;color:var(--soft);display:flex;align-items:center;gap:6px}
+.int-chip:hover{border-color:var(--b2);color:var(--txt)}
+.int-chip.on{border-color:var(--acc);background:var(--acc-s);color:var(--txt)}
+
+/* ═══════════════════════════════
+   THEME SYSTEM
+═══════════════════════════════ */
+.harmony-section{display:flex;flex-direction:column;gap:8px}
+.harmony-group{background:var(--surf2);border:1px solid var(--b1);border-radius:var(--rl);overflow:hidden}
+.hg-head{padding:9px 12px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:background .15s}
+.hg-head:hover{background:var(--surf3)}
+.hg-label{font-size:11px;font-weight:700;color:var(--txt);flex:1}
+.hg-sub{font-size:10px;color:var(--dim)}
+.hg-arr{font-size:12px;color:var(--dim);transition:transform .2s;flex-shrink:0}
+.harmony-group.open .hg-arr{transform:rotate(90deg)}
+.hg-body{display:none;padding:0 10px 10px;flex-direction:column;gap:7px}
+.harmony-group.open .hg-body{display:flex}
+/* Best theme card (default visible) */
+.theme-card{background:var(--surf3);border:1.5px solid var(--b2);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .2s var(--ease);position:relative}
+.theme-card:hover{border-color:var(--mid);transform:translateY(-1px)}
+.theme-card.on{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc-b)}
+.tc-preview{height:52px;display:flex;position:relative;overflow:hidden}
+.tc-color-bar{flex:1;transition:.3s}
+.tc-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:8px 10px;gap:3px}
+.tc-title-demo{height:7px;border-radius:2px;background:rgba(255,255,255,.85);width:60%}
+.tc-body-demo{height:4px;border-radius:1px;background:rgba(255,255,255,.4);width:80%}
+.tc-body-demo2{height:4px;border-radius:1px;background:rgba(255,255,255,.4);width:65%}
+.tc-foot{padding:7px 10px;display:flex;align-items:center;justify-content:space-between;gap:6px}
+.tc-name{font-size:11px;font-weight:700;color:var(--txt)}
+.tc-font{font-size:10px;color:var(--dim)}
+.theme-card.on .tc-font{color:var(--soft)}
+.tc-dot{width:6px;height:6px;border-radius:50%;background:var(--acc);opacity:0;transition:.15s var(--spring);transform:scale(0)}
+.theme-card.on .tc-dot{opacity:1;transform:scale(1)}
+/* Alternates label */
+.alts-toggle{font-size:10px;color:var(--dim);cursor:pointer;display:flex;align-items:center;gap:4px;padding:2px 0;transition:.15s;width:fit-content}
+.alts-toggle:hover{color:var(--soft)}
+.alts-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;display:none}
+.alts-grid.open{display:grid}
+/* Hue slider */
+.hue-row{display:flex;flex-direction:column;gap:6px;padding:2px 0}
+.hue-label{font-size:10px;font-weight:700;color:var(--dim);letter-spacing:.07em;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+.hue-val{font-family:var(--mono);font-size:10px;color:var(--acc)}
+.hue-slider{width:100%;height:8px;border-radius:4px;outline:none;cursor:pointer;border:none;padding:0;
+  background:linear-gradient(to right,#f55,#ff5,#5f5,#5ff,#55f,#f5f,#f55);
+  -webkit-appearance:none;appearance:none}
+.hue-slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid var(--acc);cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.hue-preview{display:flex;gap:4px;height:18px}
+.hp-swatch{flex:1;border-radius:3px;transition:.3s}
+/* Advanced shell */
+.adv-shell{background:var(--surf2);border:1px dashed var(--b2);border-radius:var(--r);padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+.adv-label{font-size:10px;font-weight:700;color:var(--dim);letter-spacing:.07em;text-transform:uppercase;display:flex;align-items:center;gap:5px}
+.adv-pill{font-size:8px;background:var(--surf3);border:1px solid var(--b2);border-radius:3px;padding:1px 5px;color:var(--dim);letter-spacing:.05em}
+.adv-soon{font-size:10px;color:var(--dim);font-style:italic}
+
+/* ═══════════════════════════════
+   FONT STEP
+═══════════════════════════════ */
+.font-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.font-card{background:var(--surf2);border:1.5px solid var(--b1);border-radius:var(--rl);padding:12px 12px 10px;cursor:pointer;transition:all .2s var(--ease);position:relative;overflow:hidden}
+.font-card:hover{border-color:var(--b2);transform:translateY(-1px)}
+.font-card.on{border-color:var(--acc);background:var(--acc-s)}
+.fc-sample{font-size:20px;line-height:1.2;color:var(--txt);margin-bottom:6px;height:30px;overflow:hidden}
+.fc-name{font-size:10px;font-weight:700;color:var(--dim);letter-spacing:.06em;text-transform:uppercase}
+.fc-pair{font-size:9px;color:var(--dim);margin-top:1px}
+.font-card.on .fc-name,.font-card.on .fc-pair{color:var(--soft)}
+.fc-dot{position:absolute;top:6px;right:6px;width:6px;height:6px;border-radius:50%;background:var(--acc);opacity:0;transition:.15s var(--spring);transform:scale(0)}
+.font-card.on .fc-dot{opacity:1;transform:scale(1)}
+
+/* ═══════════════════════════════
+   STUFF CARDS
+═══════════════════════════════ */
+.sc{background:var(--surf2);border:1.5px solid var(--b1);border-radius:var(--rl);overflow:hidden;transition:border-color .2s}
+.sc.filled{border-color:var(--grn)}
+.sc-head{padding:10px 12px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:background .15s}
+.sc-head:hover{background:var(--surf3)}
+.sc-ico{font-size:15px;flex-shrink:0}
+.sc-info{flex:1}
+.sc-title{font-size:12px;font-weight:700;color:var(--txt)}
+.sc-status{font-size:10px;color:var(--dim);margin-top:1px}
+.sc.filled .sc-status{color:var(--grn)}
+.sc-arr{font-size:13px;color:var(--dim);transition:transform .2s;flex-shrink:0}
+.sc.open .sc-arr{transform:rotate(90deg)}
+.sc-body{display:none;padding:0 12px 12px;flex-direction:column;gap:8px}
+.sc.open .sc-body{display:flex}
+
+/* Drop zone */
+.dz{border:1.5px dashed var(--b2);border-radius:var(--r);padding:14px;text-align:center;cursor:pointer;transition:.2s;background:var(--surf3)}
+.dz:hover,.dz.over{border-color:var(--acc);background:var(--acc-s)}
+.dz-ico{font-size:20px;margin-bottom:3px;opacity:.5}
+.dz-t{font-size:11px;color:var(--soft)}
+.dz-s{font-size:10px;color:var(--dim);margin-top:2px}
+.url-r{display:flex;gap:5px}
+.url-r input{flex:1;background:var(--surf3);border:1px solid var(--b2);border-radius:5px;color:var(--txt);font-size:11px;padding:6px 9px;outline:none;transition:.15s}
+.url-r input:focus{border-color:var(--acc)}
+.url-r input::placeholder{color:var(--dim)}
+.url-b{background:var(--surf3);border:1px solid var(--b2);border-radius:5px;color:var(--soft);padding:0 10px;font-size:11px;font-weight:700;transition:.15s}
+.url-b:hover{border-color:var(--mid);color:var(--txt)}
+.img-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.img-th{aspect-ratio:1;border-radius:5px;overflow:hidden;position:relative;background:var(--surf3);cursor:pointer;border:1.5px solid transparent}
+.img-th img{width:100%;height:100%;object-fit:cover}
+.img-th:hover .img-ov{opacity:1}
+.img-ov{position:absolute;inset:0;background:rgba(0,0,0,.65);opacity:0;transition:.15s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+.irt{font-family:var(--mono);font-size:8px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;padding:2px 5px;border-radius:3px;color:#fff}
+.irt.focal{background:var(--acc)}
+.irt.background{background:var(--blu)}
+.irt.support{background:var(--grn);color:#111}
+.img-rm{font-size:10px;color:rgba(255,255,255,.6);transition:.1s}
+.img-rm:hover{color:#fff}
+
+/* Text card commit */
+.txt-edit-state,.txt-done-state{display:flex;flex-direction:column;gap:8px}
+.txt-done-state{display:none}
+.sc.txt-committed .txt-edit-state{display:none}
+.sc.txt-committed .txt-done-state{display:flex}
+.magic-ta{width:100%;background:var(--surf3);border:1px solid var(--b2);border-radius:var(--r);color:var(--txt);font-size:12px;padding:10px 12px;outline:none;resize:none;min-height:80px;line-height:1.65;transition:.15s}
+.magic-ta:focus{border-color:var(--acc)}
+.magic-ta::placeholder{color:var(--dim)}
+.magic-hint{font-size:10px;color:var(--dim);line-height:1.5}
+.parse-btn{background:var(--acc-s);border:1px solid var(--acc-b);border-radius:5px;color:var(--acc);font-size:10px;font-weight:700;padding:5px 11px;display:none;align-items:center;gap:4px;transition:.15s;width:fit-content}
+.parse-btn.show{display:flex}
+.parse-btn:hover{background:var(--acc);color:#fff}
+.parsed-preview{background:var(--surf3);border:1px solid var(--b1);border-radius:var(--r);padding:9px 11px;display:none;flex-direction:column;gap:5px}
+.parsed-preview.show{display:flex}
+.pi{display:flex;align-items:baseline;gap:6px}
+.pt{font-family:var(--mono);font-size:8px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;padding:1px 5px;border-radius:3px;flex-shrink:0}
+.pt-title{background:var(--acc);color:#fff}
+.pt-heading{background:var(--blu);color:#fff}
+.pt-body{background:var(--surf2);color:var(--soft);border:1px solid var(--b2)}
+.pt-date{background:var(--ylw);color:#111}
+.pt-list{background:var(--grn);color:#111}
+.pv{font-size:11px;color:var(--txt);line-height:1.4}
+/* Apply / Edit buttons */
+.apply-btn{background:var(--acc);color:#fff;border:none;border-radius:6px;padding:7px 16px;font-size:12px;font-weight:700;transition:.15s;display:flex;align-items:center;gap:6px;width:fit-content}
+.apply-btn:hover{background:var(--acc2)}
+.txt-committed-preview{background:var(--surf3);border:1px solid var(--b1);border-radius:var(--r);padding:9px 11px;display:flex;flex-direction:column;gap:4px}
+.tcp-line{display:flex;align-items:baseline;gap:6px}
+.tcp-count{font-size:10px;color:var(--dim)}
+.edit-btn{background:transparent;border:1px solid var(--b2);border-radius:5px;color:var(--soft);font-size:11px;font-weight:600;padding:5px 12px;transition:.15s;display:flex;align-items:center;gap:5px;width:fit-content}
+.edit-btn:hover{border-color:var(--mid);color:var(--txt)}
+
+/* Unlock strip */
+.unlock-strip{padding:10px 14px;background:var(--surf2);border-top:1px solid var(--b1);display:flex;align-items:center;gap:8px}
+.u-dots{display:flex;gap:4px}
+.u-dot{width:6px;height:6px;border-radius:50%;background:var(--surf3);border:1px solid var(--b2);transition:.3s}
+.u-dot.has{background:var(--grn);border-color:var(--grn)}
+.u-txt{font-size:11px;color:var(--dim);flex:1}
+.u-txt.ready{color:var(--grn)}
+
+/* ═══════════════════════════════
+   CANVAS
+═══════════════════════════════ */
+#ca{background:var(--cv);display:flex;align-items:center;justify-content:center;overflow:auto;position:relative;background-image:radial-gradient(circle,var(--dot) 1px,transparent 1px);background-size:22px 22px;transition:background .25s}
+#cw{position:relative;flex-shrink:0}
+#cv{display:block;box-shadow:0 0 0 1px rgba(255,255,255,.06),0 20px 60px var(--shad);border-radius:1px;transition:opacity .4s}
+.c-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;pointer-events:none;transition:opacity .3s}
+.c-ph.gone{opacity:0;pointer-events:none}
+.ph-ico{font-size:40px;opacity:.15}
+.ph-txt{font-size:12px;color:var(--dim);text-align:center;line-height:1.75;opacity:.5}
+.ph-txt strong{color:var(--acc);font-weight:700}
+
+/* ═══════════════════════════════
+   RIGHT PANEL
+═══════════════════════════════ */
+#right{background:var(--surf);border-left:1px solid var(--b1);display:flex;flex-direction:column;overflow:hidden;min-width:180px;max-width:400px;position:relative}
+.r-head{padding:10px 14px;border-bottom:1px solid var(--b1);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);flex-shrink:0}
+.r-body{flex:1;overflow-y:auto}
+.r-sec{border-bottom:1px solid var(--b1);padding:10px 14px;display:flex;flex-direction:column;gap:6px}
+.r-slbl{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:2px;font-family:var(--mono)}
+.di-row{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+.dk{font-size:10px;color:var(--dim);font-family:var(--mono);flex-shrink:0}
+.dv{font-size:11px;color:var(--txt);text-align:right;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prop2{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.prop-r{display:flex;align-items:center;gap:5px}
+.pk{font-size:10px;color:var(--dim);font-family:var(--mono);width:14px;flex-shrink:0}
+.pv-i{flex:1;background:var(--surf2);border:1px solid var(--b2);border-radius:4px;color:var(--txt);font-family:var(--mono);font-size:11px;padding:4px 6px;outline:none;width:100%}
+.pv-i:focus{border-color:var(--acc)}
+.hint-card{margin:10px 14px;padding:11px 12px;background:var(--acc-s);border:1px solid var(--acc-b);border-radius:var(--r);font-size:11px;color:var(--soft);line-height:1.65}
+.hint-card strong{color:var(--txt)}
+
+/* ═══════════════════════════════
+   LAYERS / PAGES TABS
+═══════════════════════════════ */
+.layer-row{display:flex;align-items:center;gap:7px;padding:7px 14px;font-size:11px;color:var(--soft);border-bottom:1px solid var(--b1);transition:.15s;cursor:pointer}
+.layer-row:hover{background:var(--surf2);color:var(--txt)}
+.layer-row.on{background:var(--surf2);color:var(--txt)}
+.lvis{opacity:.3;font-size:11px;margin-left:auto}
+.page-item{display:flex;align-items:center;gap:7px;padding:8px 12px;border:1.5px solid var(--b1);border-radius:var(--r);font-size:11px;color:var(--soft);margin-bottom:5px;cursor:pointer;transition:.15s}
+.page-item.on{border-color:var(--acc);color:var(--txt);background:var(--acc-s)}
+.add-pg{background:transparent;border:1px dashed var(--b2);border-radius:var(--r);color:var(--dim);font-size:11px;font-weight:600;padding:8px 12px;display:flex;align-items:center;gap:5px;width:100%;transition:.15s}
+.add-pg:hover{border-color:var(--mid);color:var(--soft)}
+
+/* ═══════════════════════════════
+   TOASTS
+═══════════════════════════════ */
+#toasts{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:500;display:flex;flex-direction:column;gap:7px;align-items:center;pointer-events:none;width:420px;max-width:92vw}
+.toast{background:var(--surf);border:1px solid var(--b2);border-radius:10px;padding:11px 13px;display:flex;gap:9px;align-items:flex-start;box-shadow:0 8px 32px var(--shad);pointer-events:all;animation:tIn .3s var(--spring) both;max-width:100%}
+.toast.out{animation:tOut .22s var(--ease) both}
+@keyframes tIn{from{opacity:0;transform:translateY(14px) scale(.95)}to{opacity:1;transform:none}}
+@keyframes tOut{from{opacity:1}to{opacity:0;transform:translateY(6px)}}
+.t-ico{font-size:15px;flex-shrink:0;margin-top:1px}
+.t-body{flex:1;display:flex;flex-direction:column;gap:6px}
+.t-msg{font-size:12px;color:var(--txt);line-height:1.5}
+.t-opts{display:flex;gap:5px;flex-wrap:wrap}
+.t-opt{background:var(--surf2);border:1px solid var(--b2);border-radius:5px;padding:3px 8px;font-size:11px;font-weight:600;color:var(--soft);transition:.15s}
+.t-opt:hover{border-color:var(--acc);color:var(--acc)}
+.t-opt.primary{background:var(--acc-s);border-color:var(--acc-b);color:var(--acc)}
+.t-close{background:transparent;border:none;color:var(--dim);font-size:16px;padding:0;flex-shrink:0;transition:.15s;line-height:1}
+.t-close:hover{color:var(--soft)}
+
+/* ═══════════════════════════════
+   MODAL
+═══════════════════════════════ */
+.modal-bg{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.modal-bg.open{display:flex}
+.modal{background:var(--surf);border:1px solid var(--b2);border-radius:14px;padding:20px;width:100%;max-width:290px;display:flex;flex-direction:column;gap:12px;animation:mIn .25s var(--spring) both}
+@keyframes mIn{from{opacity:0;transform:scale(.9) translateY(10px)}to{opacity:1;transform:none}}
+.modal-ttl{font-size:14px;font-weight:700}
+.modal-img{height:110px;border-radius:7px;overflow:hidden;background:var(--surf2)}
+.modal-img img{width:100%;height:100%;object-fit:cover}
+.ro-opts{display:flex;flex-direction:column;gap:5px}
+.ro{background:var(--surf2);border:1.5px solid var(--b2);border-radius:var(--r);padding:9px 11px;cursor:pointer;display:flex;gap:9px;align-items:center;transition:.15s}
+.ro:hover{border-color:var(--mid)}
+.ro.on{border-color:var(--acc);background:var(--acc-s)}
+.ro-ico{font-size:15px}
+.ro-name{font-size:12px;font-weight:700}
+.ro-desc{font-size:10px;color:var(--dim)}
+
+/* ═══════════════════════════════
+   SPLASH
+═══════════════════════════════ */
+#splash{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;transition:opacity .5s,visibility .5s}
+#splash.out{opacity:0;visibility:hidden;pointer-events:none}
+.sp-mark{width:60px;height:60px;background:var(--surf);border:1.5px solid var(--b2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:36px;font-weight:600;color:var(--txt);animation:spIn .7s var(--spring) both;position:relative}
+.sp-mark::after{content:'';position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);width:0;height:2px;background:var(--acc);border-radius:1px;animation:spBar .5s var(--ease) .5s both}
+@keyframes spIn{from{opacity:0;transform:scale(.5) rotate(-12deg)}to{opacity:1;transform:none}}
+@keyframes spBar{from{width:0;opacity:0}to{width:36px;opacity:1}}
+.sp-name{font-family:var(--serif);font-size:26px;font-weight:600;color:var(--txt);letter-spacing:-.01em;animation:spFd .5s var(--ease) .3s both}
+.sp-name em{color:var(--acc);font-style:italic}
+.sp-tag{font-size:11px;color:var(--mid);animation:spFd .5s var(--ease) .5s both}
+@keyframes spFd{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+@media(max-width:960px){:root{--rw:0px}#right{display:none}}
+@media(max-width:640px){:root{--lw:0px}#left{display:none}}
+</style>
 </head>
 <body>
 
@@ -35,277 +440,273 @@
 
 <div id="shell">
 
-  <!-- ── TOPBAR ── -->
-  <header id="topbar">
-    <div class="logo">Cr<span class="logo-dot">é</span>·<span class="logo-8">8</span></div>
-    <span class="t-fname" id="fname" contenteditable="true" spellcheck="false">Untitled_Project</span>
-    <div class="tsep"></div>
-    <div class="tools">
-      <button class="tbtn on" data-t="select">
-        <svg viewBox="0 0 24 24"><path d="M5 3l14 9-7 2-4 7L5 3z" fill="currentColor" stroke="none"/></svg>
-        Select
-      </button>
-      <button class="tbtn" data-t="text">
-        <svg viewBox="0 0 24 24"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
-        Text
-      </button>
-      <button class="tbtn" data-t="shape">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-        Shape
-      </button>
-      <button class="tbtn" data-t="img">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" stroke="none"/><path d="M21 15l-5-5L5 21"/></svg>
-        Image
-      </button>
-    </div>
-    <div class="tsep"></div>
-    <div class="bar-r">
-      <span class="badge" id="status-badge">SETUP</span>
-      <button class="btn-theme" id="btn-theme" title="Toggle light/dark">🌙</button>
-      <button class="btn-gen" id="btn-gen" disabled>▶ Generate</button>
-      <button class="btn-sec" id="btn-exp" disabled>↓ Export PNG</button>
-    </div>
-  </header>
+<!-- TOPBAR -->
+<header id="bar">
+  <div class="logo">Cr<em>é</em>·<span class="logo-8">8</span></div>
+  <span class="fname" id="fname" contenteditable="true" spellcheck="false">Untitled_Project</span>
+  <div class="bsep"></div>
+  <div class="tools">
+    <button class="tb on" data-t="select"><svg viewBox="0 0 24 24"><path d="M5 3l14 9-7 2-4 7L5 3z" fill="currentColor" stroke="none"/></svg>Select</button>
+    <button class="tb" data-t="text"><svg viewBox="0 0 24 24"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>Text</button>
+    <button class="tb" data-t="shape"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>Shape</button>
+    <button class="tb" data-t="img"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" stroke="none"/><path d="M21 15l-5-5L5 21"/></svg>Image</button>
+  </div>
+  <div class="bsep"></div>
+  <div class="bar-r">
+    <span class="badge" id="status-badge">SETUP</span>
+    <button class="btn-theme" id="btn-theme" title="Toggle light/dark">🌙</button>
+    <button class="btn-refine" id="btn-refine">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      Refine
+    </button>
+    <button class="btn-exp" id="btn-exp" disabled>↓ Export PNG</button>
+  </div>
+</header>
 
-  <!-- ── LEFT PANEL ── -->
-  <div id="left">
-    <div class="resize-handle" id="rh-left"></div>
-    <div class="ptabs">
-      <button class="ptab on" data-tab="setup">Setup</button>
-      <button class="ptab" data-tab="layers">Layers</button>
-      <button class="ptab" data-tab="pages">Pages</button>
-    </div>
+<!-- LEFT PANEL -->
+<div id="left">
+  <div class="rh" id="rh-l"></div>
+  <div class="ptabs">
+    <button class="ptab on" data-tab="setup">Setup</button>
+    <button class="ptab" data-tab="layers">Layers</button>
+    <button class="ptab" data-tab="pages">Pages</button>
+  </div>
 
-    <!-- SETUP TAB -->
-    <div class="pbody" id="tab-setup">
+  <!-- SETUP TAB -->
+  <div class="pbody" id="tab-setup">
 
-      <!-- STEP 1: Category -->
-      <div class="step visible" id="step-cat">
-        <div class="step-head">
-          <div class="step-head-num">1</div>
-          <div class="step-head-info">
-            <div class="step-title">What are you making?</div>
-            <div class="step-sub">Choose the world your design lives in.</div>
-          </div>
-        </div>
-        <div class="step-body">
-          <div class="cat-grid" id="cat-grid"></div>
-        </div>
+    <!-- Step 1: Category -->
+    <div class="step visible" id="step-cat">
+      <!-- Collapsed summary -->
+      <div class="step-summary" id="ss-cat">
+        <div class="ss-num"><svg viewBox="0 0 10 8"><path d="M1 4l3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="ss-info"><div class="ss-label">Category</div><div class="ss-preview" id="ssp-cat">—</div></div>
+        <div class="ss-toggle">›</div>
       </div>
-
-      <!-- STEP 2: Format -->
-      <div class="step" id="step-type">
+      <!-- Open inner -->
+      <div class="step-inner">
         <div class="step-head">
-          <div class="step-head-num">2</div>
-          <div class="step-head-info">
-            <div class="step-title" id="step-type-title">Choose a format</div>
-            <div class="step-sub">Select the specific document type.</div>
-          </div>
+          <div class="shn">1</div>
+          <div><div class="step-title">What are you making?</div><div class="step-sub">Choose the world your design lives in.</div></div>
         </div>
-        <div class="step-body">
-          <div class="type-grid" id="type-grid"></div>
-        </div>
+        <div class="step-body"><div class="cat-grid" id="cat-grid"></div></div>
       </div>
+    </div>
 
-      <!-- STEP 3: Size -->
-      <div class="step" id="step-size">
+    <!-- Step 2: Format -->
+    <div class="step" id="step-type">
+      <div class="step-summary" id="ss-type">
+        <div class="ss-num"><svg viewBox="0 0 10 8"><path d="M1 4l3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="ss-info"><div class="ss-label">Format</div><div class="ss-preview" id="ssp-type">—</div></div>
+        <div class="ss-toggle">›</div>
+      </div>
+      <div class="step-inner">
         <div class="step-head">
-          <div class="step-head-num">3</div>
-          <div class="step-head-info">
-            <div class="step-title">Pick a size</div>
-            <div class="step-sub">Size shapes spacing and layout. Choose what fits your use.</div>
-          </div>
+          <div class="shn">2</div>
+          <div><div class="step-title" id="step-type-title">Choose a format</div><div class="step-sub">Select the specific document type.</div></div>
+        </div>
+        <div class="step-body"><div class="chip-grid" id="type-grid"></div></div>
+      </div>
+    </div>
+
+    <!-- Step 3: Size -->
+    <div class="step" id="step-size">
+      <div class="step-summary" id="ss-size">
+        <div class="ss-num"><svg viewBox="0 0 10 8"><path d="M1 4l3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="ss-info"><div class="ss-label">Size</div><div class="ss-preview" id="ssp-size">—</div></div>
+        <div class="ss-toggle">›</div>
+      </div>
+      <div class="step-inner">
+        <div class="step-head">
+          <div class="shn">3</div>
+          <div><div class="step-title">Pick a size</div><div class="step-sub">Size shapes spacing and layout — choose what fits your use.</div></div>
         </div>
         <div class="step-body">
           <div class="size-grid" id="size-grid"></div>
-          <div class="custom-size-row" id="csr">
-            <div class="csr-label">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-              Custom dimensions
-            </div>
-            <div class="csr-inputs">
-              <input class="dim-inp" type="number" id="cdw" placeholder="W" min="1"/>
-              <span class="dim-x">×</span>
-              <input class="dim-inp" type="number" id="cdh" placeholder="H" min="1"/>
-              <select class="dim-unit" id="cdu">
-                <option value="mm">mm</option>
-                <option value="in">in</option>
-                <option value="px">px</option>
-                <option value="cm">cm</option>
-                <option value="ft">ft</option>
-              </select>
+          <div class="csr" id="csr">
+            <div class="csr-lbl"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Custom dimensions</div>
+            <div class="csr-inp">
+              <input class="di" type="number" id="cdw" placeholder="W" min="1"/>
+              <span class="dx">×</span>
+              <input class="di" type="number" id="cdh" placeholder="H" min="1"/>
+              <select class="du" id="cdu"><option value="mm">mm</option><option value="in">in</option><option value="px">px</option><option value="cm">cm</option><option value="ft">ft</option></select>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- STEP 4: Intent -->
-      <div class="step" id="step-intent">
+    <!-- Step 4: Intent -->
+    <div class="step" id="step-intent">
+      <div class="step-summary" id="ss-intent">
+        <div class="ss-num"><svg viewBox="0 0 10 8"><path d="M1 4l3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="ss-info"><div class="ss-label">Intent</div><div class="ss-preview" id="ssp-intent">—</div></div>
+        <div class="ss-toggle">›</div>
+      </div>
+      <div class="step-inner">
         <div class="step-head">
-          <div class="step-head-num">4</div>
-          <div class="step-head-info">
-            <div class="step-title">What's it for?</div>
-            <div class="step-sub">This shapes tone, hierarchy, and layout direction.</div>
-          </div>
+          <div class="shn">4</div>
+          <div><div class="step-title">What's it for?</div><div class="step-sub">This shapes tone, hierarchy, and layout direction.</div></div>
+        </div>
+        <div class="step-body"><div class="intent-grid" id="intent-grid"></div></div>
+      </div>
+    </div>
+
+    <!-- Step 5: Theme -->
+    <div class="step" id="step-theme">
+      <div class="step-summary" id="ss-theme">
+        <div class="ss-num"><svg viewBox="0 0 10 8"><path d="M1 4l3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="ss-info"><div class="ss-label">Theme</div><div class="ss-preview" id="ssp-theme">—</div></div>
+        <div class="ss-toggle">›</div>
+      </div>
+      <div class="step-inner">
+        <div class="step-head">
+          <div class="shn">5</div>
+          <div><div class="step-title">Choose a theme</div><div class="step-sub">Color harmony and feel — your content drives the best match.</div></div>
         </div>
         <div class="step-body">
-          <div class="intent-grid" id="intent-grid"></div>
+          <div class="harmony-section" id="harmony-section"></div>
+          <!-- Hue slider -->
+          <div class="hue-row">
+            <div class="hue-label">Shift base hue <span class="hue-val" id="hue-val">0°</span></div>
+            <input type="range" class="hue-slider" id="hue-slider" min="0" max="360" value="0"/>
+            <div class="hue-preview" id="hue-preview"></div>
+          </div>
+          <!-- Advanced shell -->
+          <div class="adv-shell">
+            <div class="adv-label">Advanced <span class="adv-pill">Coming soon</span></div>
+            <div class="adv-soon">Custom font overrides, spacing ratios, and harmony fine-tuning will live here.</div>
+          </div>
         </div>
       </div>
+    </div>
 
-      <!-- STEP 5: Your Stuff -->
-      <div class="step" id="step-stuff">
+    <!-- Step 6: Fonts -->
+    <div class="step" id="step-fonts">
+      <div class="step-summary" id="ss-fonts">
+        <div class="ss-num"><svg viewBox="0 0 10 8"><path d="M1 4l3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="ss-info"><div class="ss-label">Fonts</div><div class="ss-preview" id="ssp-fonts">—</div></div>
+        <div class="ss-toggle">›</div>
+      </div>
+      <div class="step-inner">
         <div class="step-head">
-          <div class="step-head-num">5</div>
-          <div class="step-head-info">
-            <div class="step-title">Add your content</div>
-            <div class="step-sub">Image, colors, or text — add at least one. More is better.</div>
-          </div>
+          <div class="shn">6</div>
+          <div><div class="step-title">Choose a style</div><div class="step-sub">Pick by feel — not by font name.</div></div>
+        </div>
+        <div class="step-body"><div class="font-grid" id="font-grid"></div></div>
+      </div>
+    </div>
+
+    <!-- Step 7: Content -->
+    <div class="step" id="step-stuff">
+      <div class="step-inner">
+        <div class="step-head">
+          <div class="shn">7</div>
+          <div><div class="step-title">Add your content</div><div class="step-sub">Image, theme, or text — at least one. More = better results.</div></div>
         </div>
         <div class="step-body">
-          <div class="stuff-cards">
 
-            <!-- Images -->
-            <div class="sc" id="sc-img">
-              <div class="sc-head">
-                <span class="sc-ico">🖼️</span>
-                <div class="sc-info">
-                  <div class="sc-title">Images</div>
-                  <div class="sc-status" id="img-status">Drop a photo or paste a URL</div>
-                </div>
-                <span class="sc-arr">›</span>
+          <!-- Images -->
+          <div class="sc" id="sc-img">
+            <div class="sc-head"><span class="sc-ico">🖼️</span><div class="sc-info"><div class="sc-title">Images</div><div class="sc-status" id="img-status">Drop a photo or paste a URL</div></div><span class="sc-arr">›</span></div>
+            <div class="sc-body">
+              <div class="dz" id="dz"><div class="dz-ico">↑</div><div class="dz-t">Drop or click to upload</div><div class="dz-s">PNG · JPG · WEBP · SVG</div><input type="file" id="fi" accept="image/*" multiple style="display:none"/></div>
+              <div class="url-r"><input type="text" id="url-inp" placeholder="Or paste an image URL…"/><button class="url-b" id="url-btn">Load</button></div>
+              <div class="img-grid" id="img-grid"></div>
+            </div>
+          </div>
+
+          <!-- Text with commit -->
+          <div class="sc" id="sc-txt">
+            <div class="sc-head"><span class="sc-ico">✏️</span><div class="sc-info"><div class="sc-title">Content</div><div class="sc-status" id="txt-status">Paste anything — we'll sort it out</div></div><span class="sc-arr">›</span></div>
+            <div class="sc-body">
+              <!-- Edit state -->
+              <div class="txt-edit-state" id="txt-edit-state">
+                <textarea class="magic-ta" id="magic-ta" rows="4" placeholder="Paste your text — event details, a menu, your bio, product copy. Cré·8 reads it and figures out what's a title, what's a date, what's body copy."></textarea>
+                <div class="magic-hint">✦ Magic Parse identifies titles, headings, dates and lists automatically.</div>
+                <button class="parse-btn" id="parse-btn"><span>✦</span> Parse content</button>
+                <div class="parsed-preview" id="parsed-preview"></div>
+                <button class="apply-btn" id="apply-btn" style="display:none">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+                  Apply to design
+                </button>
               </div>
-              <div class="sc-body">
-                <div class="dz" id="dz">
-                  <div class="dz-ico">↑</div>
-                  <div class="dz-t">Drop image or click to browse</div>
-                  <div class="dz-s">PNG · JPG · WEBP · SVG</div>
-                  <input type="file" id="fi" accept="image/*" multiple style="display:none"/>
-                </div>
-                <div class="url-row">
-                  <input type="text" id="url-inp" placeholder="Or paste an image URL…"/>
-                  <button class="url-btn" id="url-btn">Load</button>
-                </div>
-                <div class="img-grid" id="img-grid"></div>
+              <!-- Committed state -->
+              <div class="txt-done-state" id="txt-done-state">
+                <div class="txt-committed-preview" id="tcp"></div>
+                <button class="edit-btn" id="edit-btn">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Edit content
+                </button>
               </div>
             </div>
-
-            <!-- Colors -->
-            <div class="sc" id="sc-col">
-              <div class="sc-head">
-                <span class="sc-ico">🎨</span>
-                <div class="sc-info">
-                  <div class="sc-title">Colors</div>
-                  <div class="sc-status" id="col-status">Pick a palette — or we'll pull from your images</div>
-                </div>
-                <span class="sc-arr">›</span>
-              </div>
-              <div class="sc-body">
-                <div class="pal-grid" id="pal-grid"></div>
-                <div class="custom-colors-label">Custom colors</div>
-                <div class="custom-color-row" id="ccr">
-                  <button class="add-col-btn" id="add-col">+</button>
-                </div>
-                <div id="extracted-note" style="display:none">
-                  <span>✦</span><span>Palette suggested from your image</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Text -->
-            <div class="sc" id="sc-txt">
-              <div class="sc-head">
-                <span class="sc-ico">✏️</span>
-                <div class="sc-info">
-                  <div class="sc-title">Content</div>
-                  <div class="sc-status" id="txt-status">Paste anything — we'll sort it out</div>
-                </div>
-                <span class="sc-arr">›</span>
-              </div>
-              <div class="sc-body">
-                <textarea class="magic-ta" id="magic-ta" rows="4"
-                  placeholder="Paste your text — event details, a menu, your bio, product copy. Cré·8 reads it and figures out what's a title, what's a date, what's body copy."></textarea>
-                <div class="magic-hint">✦ Magic Parse identifies titles, headings, dates, lists automatically.</div>
-                <button class="parse-btn" id="parse-btn" style="display:none"><span>✦</span> Parse content</button>
-                <div id="parsed-out" style="display:none"></div>
-              </div>
-            </div>
-
-          </div><!-- /stuff-cards -->
+          </div>
 
           <!-- Unlock strip -->
           <div class="unlock-strip">
             <div class="u-dots">
-              <div class="u-dot" id="ud-img" title="Images"></div>
-              <div class="u-dot" id="ud-col" title="Colors"></div>
-              <div class="u-dot" id="ud-txt" title="Text"></div>
+              <div class="u-dot" id="ud-img"></div>
+              <div class="u-dot" id="ud-theme"></div>
+              <div class="u-dot" id="ud-txt"></div>
             </div>
-            <div class="u-txt" id="u-txt">Add at least one to unlock Generate</div>
+            <div class="u-txt" id="u-txt">Add at least one to see your design</div>
           </div>
         </div>
       </div>
-
-    </div><!-- /tab-setup -->
-
-    <!-- LAYERS TAB -->
-    <div style="display:none;flex:1;overflow-y:auto;flex-direction:column" id="tab-layers"></div>
-
-    <!-- PAGES TAB -->
-    <div style="display:none;flex-direction:column;padding:12px 14px;gap:0;flex:1;overflow-y:auto" id="tab-pages">
-      <div id="pages-list">
-        <div class="page-item on"><span>📄</span><span style="flex:1">Page 1</span></div>
-      </div>
-      <button class="add-pg-btn" id="add-pg">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-        Add page
-      </button>
     </div>
-  </div><!-- /left -->
 
-  <!-- ── CANVAS ── -->
-  <div id="canvas-area">
-    <div id="cw">
-      <canvas id="canvas-el" width="1" height="1" style="opacity:0"></canvas>
-      <div class="canvas-ph" id="canvas-ph">
-        <div class="ph-ico">▭</div>
-        <div class="ph-txt">Choose a format above<br>then hit <strong>▶ Generate</strong></div>
-      </div>
+  </div><!-- /tab-setup -->
+
+  <!-- LAYERS TAB -->
+  <div style="display:none;flex:1;overflow-y:auto;flex-direction:column" id="tab-layers"></div>
+
+  <!-- PAGES TAB -->
+  <div style="display:none;flex-direction:column;padding:12px 14px;gap:0;flex:1;overflow-y:auto" id="tab-pages">
+    <div id="pages-list"><div class="page-item on"><span>📄</span><span style="flex:1">Page 1</span></div></div>
+    <button class="add-pg" id="add-pg"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add page</button>
+  </div>
+</div>
+
+<!-- CANVAS -->
+<div id="ca">
+  <div id="cw">
+    <canvas id="cv" width="1" height="1" style="opacity:0"></canvas>
+    <div class="c-ph" id="c-ph">
+      <div class="ph-ico">▭</div>
+      <div class="ph-txt">Choose a format and size<br>to see your canvas</div>
     </div>
   </div>
+</div>
 
-  <!-- ── RIGHT PANEL ── -->
-  <div id="right">
-    <div class="resize-handle-r" id="rh-right"></div>
-    <div class="r-head">Document</div>
-    <div class="r-body">
-      <div class="r-sec">
-        <div class="r-slbl">Info</div>
-        <div class="di-row"><span class="dk">file</span><span class="dv" id="di-file">—</span></div>
-        <div class="di-row"><span class="dk">type</span><span class="dv" id="di-type">—</span></div>
-        <div class="di-row"><span class="dk">size</span><span class="dv" id="di-size">—</span></div>
-        <div class="di-row"><span class="dk">pages</span><span class="dv" id="di-pages">1</span></div>
-        <div class="di-row"><span class="dk">intent</span><span class="dv" id="di-intent">—</span></div>
+<!-- RIGHT PANEL -->
+<div id="right">
+  <div class="rh-r" id="rh-r"></div>
+  <div class="r-head">Document</div>
+  <div class="r-body">
+    <div class="r-sec">
+      <div class="r-slbl">Info</div>
+      <div class="di-row"><span class="dk">file</span><span class="dv" id="di-file">—</span></div>
+      <div class="di-row"><span class="dk">type</span><span class="dv" id="di-type">—</span></div>
+      <div class="di-row"><span class="dk">size</span><span class="dv" id="di-size">—</span></div>
+      <div class="di-row"><span class="dk">pages</span><span class="dv" id="di-pages">1</span></div>
+      <div class="di-row"><span class="dk">intent</span><span class="dv" id="di-intent">—</span></div>
+      <div class="di-row"><span class="dk">theme</span><span class="dv" id="di-theme">—</span></div>
+    </div>
+    <div class="hint-card" id="hint-card">Choose <strong>Format</strong> and <strong>Size</strong> — your canvas appears instantly. Add content to fill it.</div>
+    <div class="r-sec" id="props-sec" style="display:none">
+      <div class="r-slbl">Selection</div>
+      <div class="prop2">
+        <div class="prop-r"><span class="pk">X</span><input class="pv-i" type="number" value="0"/></div>
+        <div class="prop-r"><span class="pk">Y</span><input class="pv-i" type="number" value="0"/></div>
       </div>
-      <div class="hint-card" id="hint-card">
-        Complete <strong>Format</strong>, <strong>Size</strong>, and add at least one piece of content — then click <strong>▶ Generate</strong>.
+      <div class="prop2">
+        <div class="prop-r"><span class="pk">W</span><input class="pv-i" type="number" value="0"/></div>
+        <div class="prop-r"><span class="pk">H</span><input class="pv-i" type="number" value="0"/></div>
       </div>
-      <div class="r-sec" id="props-sec" style="display:none">
-        <div class="r-slbl">Selection</div>
-        <div class="prop2">
-          <div class="prop-row"><span class="pk">X</span><input class="pv-inp" type="number" value="0"/></div>
-          <div class="prop-row"><span class="pk">Y</span><input class="pv-inp" type="number" value="0"/></div>
-        </div>
-        <div class="prop2">
-          <div class="prop-row"><span class="pk">W</span><input class="pv-inp" type="number" value="0"/></div>
-          <div class="prop-row"><span class="pk">H</span><input class="pv-inp" type="number" value="0"/></div>
-        </div>
-        <div class="prop-row" style="margin-top:2px">
-          <span class="pk" style="width:auto;margin-right:6px">opacity</span>
-          <input class="pv-inp" type="number" value="100" min="0" max="100"/>
-        </div>
-      </div>
+      <div class="prop-r" style="margin-top:2px"><span class="pk" style="width:auto;margin-right:5px">opacity</span><input class="pv-i" type="number" value="100" min="0" max="100"/></div>
     </div>
   </div>
+</div>
 
 </div><!-- /shell -->
 
@@ -322,22 +723,953 @@
   </div>
 </div>
 
-<!-- TOASTS -->
 <div id="toasts"></div>
 
-<!-- App script -->
-<script src="js/app.js"></script>
-
-<!-- Service Worker registration -->
 <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js')
-        .then(reg => console.log('[Cré·8] SW registered:', reg.scope))
-        .catch(err => console.warn('[Cré·8] SW registration failed:', err));
-    });
-  }
-</script>
+/* ═══════════════════════════════
+   THEME DATA STRUCTURE
+═══════════════════════════════ */
+const HARMONIES = [
+  {
+    id:'analogous', label:'Analogous', sub:'Calm · Natural · Cohesive',
+    themes:[
+      { id:'warm-editorial', name:'Warm Editorial', mood:'warm, refined, literary',
+        intents:['showcase','inform','brand'],
+        palette: h => hslPalette(h+10, [[h+10,65,12],[h+15,50,25],[h+20,55,50],[h+5,70,75],[h-5,80,90]]),
+        typography:{ display:'Cormorant Garamond', body:'Lato', personality:'Classic & Formal' },
+        scale:{ title:{min:32,max:64,weight:700}, heading:{min:20,max:36,weight:600}, body:{min:12,max:15,weight:400}, label:{min:9,max:11,weight:700,transform:'uppercase',tracking:'0.1em'} }
+      },
+      { id:'sage-calm', name:'Sage & Calm', mood:'natural, peaceful, considered',
+        intents:['inform','brand','showcase'],
+        palette: h => hslPalette(h+140, [[h+140,40,12],[h+145,35,25],[h+150,45,48],[h+135,50,72],[h+130,40,88]]),
+        typography:{ display:'Merriweather', body:'Lato', personality:'Warm & Readable' },
+        scale:{ title:{min:28,max:56,weight:700}, heading:{min:18,max:32,weight:600}, body:{min:12,max:15,weight:300}, label:{min:9,max:11,weight:700,transform:'uppercase',tracking:'0.08em'} }
+      },
+      { id:'deep-coast', name:'Deep Coast', mood:'trustworthy, deep, calm',
+        intents:['inform','report','brand'],
+        palette: h => hslPalette(h+210, [[h+210,70,10],[h+215,60,22],[h+220,65,40],[h+205,55,68],[h+200,45,88]]),
+        typography:{ display:'Playfair Display', body:'Nunito', personality:'Refined & Clear' },
+        scale:{ title:{min:30,max:60,weight:700}, heading:{min:18,max:34,weight:600}, body:{min:12,max:15,weight:400}, label:{min:9,max:11,weight:700,transform:'uppercase',tracking:'0.09em'} }
+      },
+    ]
+  },
+  {
+    id:'complementary', label:'Complementary', sub:'Bold · Dynamic · High contrast',
+    themes:[
+      { id:'ember-frost', name:'Ember & Frost', mood:'energetic, striking, modern',
+        intents:['announce','promote','sell'],
+        palette: h => hslPalette(h, [[h,80,8],[h,75,20],[h,85,55],[h+180,65,62],[h+175,70,88]]),
+        typography:{ display:'Raleway', body:'Nunito', personality:'Bold & Expressive' },
+        scale:{ title:{min:34,max:68,weight:700}, heading:{min:20,max:38,weight:700}, body:{min:12,max:15,weight:400}, label:{min:9,max:11,weight:700,transform:'uppercase',tracking:'0.12em'} }
+      },
+      { id:'night-gold', name:'Night & Gold', mood:'premium, dramatic, powerful',
+        intents:['brand','celebrate','showcase'],
+        palette: h => hslPalette(h+40, [[h+40,10,8],[h+40,12,16],[h+40,15,26],[h+220,70,60],[h+40,80,72]]),
+        typography:{ display:'Cormorant Garamond', body:'Josefin Sans', personality:'Luxury & Editorial' },
+        scale:{ title:{min:32,max:64,weight:600}, heading:{min:18,max:34,weight:400}, body:{min:12,max:15,weight:300}, label:{min:9,max:11,weight:700,transform:'uppercase',tracking:'0.15em'} }
+      },
+    ]
+  },
+  {
+    id:'split-complementary', label:'Split-Complementary', sub:'Vibrant · Balanced · Versatile',
+    themes:[
+      { id:'festival', name:'Festival', mood:'joyful, lively, celebratory',
+        intents:['celebrate','announce','engage'],
+        palette: h => hslPalette(h, [[h,75,10],[h,70,22],[h,80,52],[h+150,65,60],[h+210,65,62]]),
+        typography:{ display:'Raleway', body:'Nunito', personality:'Playful & Friendly' },
+        scale:{ title:{min:32,max:64,weight:800}, heading:{min:20,max:36,weight:700}, body:{min:12,max:15,weight:500}, label:{min:9,max:11,weight:700,transform:'uppercase',tracking:'0.08em'} }
+      },
+      { id:'promo-punch', name:'Promo Punch', mood:'direct, confident, commercial',
+        intents:['sell','promote','engage'],
+        palette: h => hslPalette(h+15, [[h+15,80,8],[h+15,75,18],[h+15,85,50],[h+165,60,55],[h+225,65,58]]),
+        typography:{ display:'Josefin Sans', body:'Lato', personality:'Modern & Clean' },
+        scale:{ title:{min:30,max:60,weight:700}, heading:{min:18,max:34,weight:600}, body:{min:12,max:15,weight:400}, label:{min:9,max:11,weight:600,transform:'uppercase',tracking:'0.1em'} }
+      },
+    ]
+  },
+  {
+    id:'triadic', label:'Triadic', sub:'Vibrant · Rich · Balanced',
+    themes:[
+      { id:'vivid-triad', name:'Vivid Triad', mood:'bold, rich, expressive',
+        intents:['promote','announce','showcase'],
+        palette: h => hslPalette(h, [[h,70,10],[h,65,22],[h,75,50],[h+120,65,55],[h+240,65,58]]),
+        typography:{ display:'Raleway', body:'Nunito', personality:'Bold & Expressive' },
+        scale:{ title:{min:32,max:64,weight:700}, heading:{min:20,max:36,weight:600}, body:{min:12,max:15,weight:400}, label:{min:9,max:11,weight:700,transform:'uppercase',tracking:'0.1em'} }
+      },
+      { id:'earthy-triad', name:'Earthy Triad', mood:'grounded, creative, warm',
+        intents:['showcase','brand','inform'],
+        palette: h => hslPalette(h+30, [[h+30,50,10],[h+30,45,22],[h+30,55,48],[h+150,45,52],[h+270,40,55]]),
+        typography:{ display:'Libre Baskerville', body:'Nunito', personality:'Warm & Readable' },
+        scale:{ title:{min:28,max:56,weight:700}, heading:{min:18,max:32,weight:600}, body:{min:12,max:15,weight:400}, label:{min:9,max:11,weight:700,transform:'uppercase',tracking:'0.09em'} }
+      },
+    ]
+  },
+  {
+    id:'monochromatic', label:'Monochromatic', sub:'Sophisticated · Safe · Timeless',
+    themes:[
+      { id:'deep-mono', name:'Deep Mono', mood:'sophisticated, focused, strong',
+        intents:['report','brand','inform'],
+        palette: h => hslPalette(h, [[h,70,6],[h,60,16],[h,65,34],[h,55,60],[h,40,82]]),
+        typography:{ display:'Playfair Display', body:'Lato', personality:'Refined & Clear' },
+        scale:{ title:{min:30,max:60,weight:700}, heading:{min:18,max:34,weight:600}, body:{min:12,max:15,weight:400}, label:{min:9,max:11,weight:700,transform:'uppercase',tracking:'0.1em'} }
+      },
+      { id:'light-mono', name:'Light Mono', mood:'clean, airy, minimal',
+        intents:['showcase','brand','inform'],
+        palette: h => hslPalette(h, [[h,30,92],[h,25,80],[h,35,62],[h,50,38],[h,65,16]]),
+        typography:{ display:'Cormorant Garamond', body:'Josefin Sans', personality:'Minimal & Elegant' },
+        scale:{ title:{min:32,max:64,weight:600}, heading:{min:18,max:34,weight:400}, body:{min:12,max:15,weight:300}, label:{min:9,max:11,weight:600,transform:'uppercase',tracking:'0.14em'} }
+      },
+    ]
+  },
+  {
+    id:'neutral', label:'Neutral', sub:'Professional · Universal · Timeless',
+    themes:[
+      { id:'ink-paper', name:'Ink & Paper', mood:'classic, professional, trustworthy',
+        intents:['report','inform','brand'],
+        palette: h => ['#0f0f0f','#1e1e1e','#3c3c3c','#888888','#f5f5f5'],
+        typography:{ display:'Libre Baskerville', body:'Lato', personality:'Classic & Formal' },
+        scale:{ title:{min:30,max:60,weight:700}, heading:{min:18,max:34,weight:700}, body:{min:12,max:15,weight:400}, label:{min:9,max:11,weight:700,transform:'uppercase',tracking:'0.1em'} }
+      },
+      { id:'slate-clean', name:'Slate & Clean', mood:'modern, neutral, versatile',
+        intents:['report','showcase','sell'],
+        palette: h => ['#0d1117','#1c2333','#2d3748','#718096','#edf2f7'],
+        typography:{ display:'Raleway', body:'Nunito', personality:'Modern & Clean' },
+        scale:{ title:{min:30,max:60,weight:700}, heading:{min:18,max:34,weight:600}, body:{min:12,max:15,weight:400}, label:{min:9,max:11,weight:700,transform:'uppercase',tracking:'0.09em'} }
+      },
+    ]
+  },
+];
 
+const FONT_PERSONALITIES = [
+  { id:'classic-formal', label:'Classic & Formal', display:'Cormorant Garamond', body:'Lato', sample:'Elegant', sampleFont:'Cormorant Garamond', desc:'Display + Clean sans', best:['resume','letterhead','certificate','report'] },
+  { id:'modern-clean', label:'Modern & Clean', display:'Raleway', body:'Nunito', sample:'Modern', sampleFont:'Raleway', desc:'Geometric + Friendly', best:['social-post','digital-poster','infographic'] },
+  { id:'warm-friendly', label:'Warm & Friendly', display:'Nunito', body:'Lato', sample:'Welcome', sampleFont:'Nunito', desc:'Rounded + Readable', best:['menu','invitation','event-flyer'] },
+  { id:'bold-expressive', label:'Bold & Expressive', display:'Playfair Display', body:'Nunito', sample:'Impact', sampleFont:'Playfair Display', desc:'Dramatic + Rounded', best:['poster','banner','event-poster'] },
+  { id:'minimal-elegant', label:'Minimal & Elegant', display:'Josefin Sans', body:'Lato', sample:'Simple', sampleFont:'Josefin Sans', desc:'Geometric + Light', best:['biz-card','packaging','sticker'] },
+  { id:'editorial', label:'Editorial', display:'Libre Baskerville', body:'Nunito', sample:'Stories', sampleFont:'Libre Baskerville', desc:'Serif + Modern sans', best:['magazine','booklet','portfolio'] },
+];
+
+/* ═══════════════════════════════
+   OUTPUT TYPES & SIZES
+═══════════════════════════════ */
+const CATS=[
+  {id:'print',name:'Print',ico:'🖨️',svg:`<svg viewBox="0 0 120 80" fill="none"><rect x="24" y="10" width="72" height="60" rx="3" fill="#313139" stroke="#42424e" stroke-width="1.2"/><rect x="32" y="18" width="56" height="9" rx="2" fill="#7c6af5" opacity=".75"/><rect x="32" y="32" width="42" height="3.5" rx="2" fill="#55556a"/><rect x="32" y="39" width="50" height="3" rx="1.5" fill="#42424e"/><rect x="32" y="45" width="44" height="3" rx="1.5" fill="#42424e"/><rect x="32" y="55" width="32" height="8" rx="3" fill="#42424e"/></svg>`,
+    types:[{id:'poster',n:'Poster',ico:'🪧',dim:'Large format'},{id:'flyer',n:'Flyer',ico:'📋',dim:'A5 · Letter'},{id:'menu',n:'Menu',ico:'🍽️',dim:'A4 · A5'},{id:'invitation',n:'Invitation',ico:'✉️',dim:'5×7" · A6'},{id:'banner',n:'Banner',ico:'🏮',dim:'Wide format'},{id:'certificate',n:'Certificate',ico:'🏅',dim:'Landscape'},{id:'resume',n:'Resume / CV',ico:'📄',dim:'A4 · Letter'}]},
+  {id:'multipage',name:'Multi-Page',ico:'📚',svg:`<svg viewBox="0 0 120 80" fill="none"><rect x="8" y="12" width="50" height="58" rx="3" fill="#313139" stroke="#42424e" stroke-width="1.2"/><rect x="62" y="12" width="50" height="58" rx="3" fill="#313139" stroke="#42424e" stroke-width="1.2"/><rect x="14" y="20" width="38" height="6" rx="2" fill="#7c6af5" opacity=".6"/><rect x="14" y="30" width="32" height="3" rx="1.5" fill="#55556a"/><rect x="14" y="36" width="36" height="3" rx="1.5" fill="#42424e"/><rect x="68" y="20" width="38" height="28" rx="2" fill="#42424e" opacity=".4"/><rect x="68" y="52" width="32" height="3" rx="1.5" fill="#42424e"/></svg>`,
+    types:[{id:'brochure-bi',n:'Bi-fold',ico:'📰',dim:'A4 · Letter'},{id:'brochure-tri',n:'Tri-fold',ico:'📂',dim:'6 panels'},{id:'magazine',n:'Magazine',ico:'📖',dim:'A4 · Letter'},{id:'report',n:'Report',ico:'📊',dim:'A4 · Letter'},{id:'portfolio',n:'Portfolio',ico:'🎨',dim:'A4 · Square'},{id:'catalog',n:'Catalog',ico:'🗂️',dim:'A4 · Letter'},{id:'booklet',n:'Booklet',ico:'📔',dim:'A5 · Half-ltr'}]},
+  {id:'stationery',name:'Stationery & ID',ico:'💼',svg:`<svg viewBox="0 0 120 80" fill="none"><rect x="26" y="24" width="68" height="40" rx="3" fill="#313139" stroke="#42424e" stroke-width="1.2"/><rect x="26" y="24" width="68" height="9" rx="2" fill="#7c6af5" opacity=".5"/><rect x="32" y="38" width="22" height="3.5" rx="2" fill="#55556a"/><rect x="32" y="44" width="48" height="2.5" rx="1.5" fill="#42424e"/><rect x="10" y="14" width="34" height="22" rx="2" fill="#28282f" stroke="#42424e" stroke-width="1.2"/><rect x="14" y="18" width="12" height="7" rx="1.5" fill="#7c6af5" opacity=".4"/></svg>`,
+    types:[{id:'biz-card',n:'Business Card',ico:'🪪',dim:'3.5×2" · 85×55mm'},{id:'letterhead',n:'Letterhead',ico:'📝',dim:'A4 · Letter'},{id:'envelope',n:'Envelope',ico:'🫅',dim:'#10 · DL · C5'}]},
+  {id:'digital',name:'Digital & Social',ico:'📱',svg:`<svg viewBox="0 0 120 80" fill="none"><rect x="40" y="6" width="40" height="68" rx="6" fill="#313139" stroke="#42424e" stroke-width="1.2"/><rect x="44" y="14" width="32" height="32" rx="2" fill="#42424e" opacity=".5"/><rect x="44" y="50" width="22" height="4" rx="2" fill="#7c6af5" opacity=".8"/><rect x="44" y="57" width="28" height="2.5" rx="1.5" fill="#42424e"/></svg>`,
+    types:[{id:'social-post',n:'Social Post',ico:'📸',dim:'Feed · Story'},{id:'thumbnail',n:'Thumbnail',ico:'▶️',dim:'YouTube'},{id:'infographic',n:'Infographic',ico:'📊',dim:'Tall · Wide'},{id:'digital-poster',n:'Digital Poster',ico:'🖥️',dim:'FHD · 4K'},{id:'email-header',n:'Email Header',ico:'📧',dim:'600px wide'}]},
+  {id:'product',name:'Product',ico:'📦',svg:`<svg viewBox="0 0 120 80" fill="none"><rect x="30" y="18" width="60" height="46" rx="4" fill="#313139" stroke="#42424e" stroke-width="1.2"/><rect x="30" y="18" width="60" height="14" rx="3" fill="#7c6af5" opacity=".5"/><circle cx="60" cy="50" r="11" fill="#28282f" stroke="#42424e" stroke-width="1.2"/></svg>`,
+    types:[{id:'sticker',n:'Sticker',ico:'🔖',dim:'Circle · Die-cut'},{id:'packaging',n:'Packaging',ico:'📦',dim:'Custom'},{id:'label',n:'Product Label',ico:'🏷️',dim:'Custom'}]},
+  {id:'events',name:'Events & Promo',ico:'🎉',svg:`<svg viewBox="0 0 120 80" fill="none"><rect x="14" y="10" width="92" height="60" rx="4" fill="#313139" stroke="#42424e" stroke-width="1.2"/><rect x="14" y="10" width="92" height="24" rx="3" fill="#42424e" opacity=".35"/><circle cx="38" cy="22" r="9" fill="#7c6af5" opacity=".4"/><rect x="52" y="17" width="40" height="5" rx="2.5" fill="#7c6af5" opacity=".8"/><rect x="20" y="44" width="52" height="2.5" rx="1.5" fill="#42424e"/><rect x="64" y="52" width="28" height="11" rx="3.5" fill="#7c6af5" opacity=".6"/></svg>`,
+    types:[{id:'event-poster',n:'Event Poster',ico:'🎪',dim:'A3 · 18×24"'},{id:'event-flyer',n:'Event Flyer',ico:'🎫',dim:'A5 · Half-ltr'},{id:'social-event',n:'Social Event Card',ico:'📣',dim:'1080×1080'},{id:'ticket',n:'Ticket',ico:'🎟️',dim:'5.5×2"'}]},
+];
+
+const SIZES_DB={
+  poster:[{n:'A3',w:297,h:420,u:'mm',r:.707,ctx:'Standard wall poster'},{n:'A2',w:420,h:594,u:'mm',r:.707,ctx:'Large venue display'},{n:'18×24"',w:18,h:24,u:'in',r:.75,ctx:'US concert / movie'},{n:'24×36"',w:24,h:36,u:'in',r:.667,ctx:'US large format'}],
+  flyer:[{n:'A5',w:148,h:210,u:'mm',r:.704,ctx:'Half of A4 sheet'},{n:'Letter',w:8.5,h:11,u:'in',r:.773,ctx:'US standard page'},{n:'Half-letter',w:5.5,h:8.5,u:'in',r:.647,ctx:'Compact handout'}],
+  menu:[{n:'A4',w:210,h:297,u:'mm',r:.707,ctx:'Standard restaurant menu'},{n:'A5',w:148,h:210,u:'mm',r:.704,ctx:'Compact café menu'},{n:'4.25×11"',w:4.25,h:11,u:'in',r:.386,ctx:'Narrow panel'}],
+  invitation:[{n:'5×7"',w:5,h:7,u:'in',r:.714,ctx:'Classic invitation card'},{n:'A6',w:105,h:148,u:'mm',r:.709,ctx:'Postcard size'},{n:'4×6"',w:4,h:6,u:'in',r:.667,ctx:'Small card'}],
+  banner:[{n:'2×6 ft',w:2,h:6,u:'ft',r:.333,ctx:'Pull-up / retractable'},{n:'3×6 ft',w:3,h:6,u:'ft',r:.5,ctx:'Standard backdrop'},{n:'4×8 ft',w:4,h:8,u:'ft',r:.5,ctx:'Large event banner'},{n:'8×4 ft wide',w:8,h:4,u:'ft',r:2,ctx:'Wide tarpaulin'}],
+  certificate:[{n:'A4 Landscape',w:297,h:210,u:'mm',r:1.414,ctx:'Standard certificate'},{n:'Letter Landscape',w:11,h:8.5,u:'in',r:1.294,ctx:'US certificate'}],
+  resume:[{n:'A4',w:210,h:297,u:'mm',r:.707,ctx:'International standard'},{n:'Letter',w:8.5,h:11,u:'in',r:.773,ctx:'US / Canada'}],
+  'brochure-bi':[{n:'A4 Bi-fold',w:420,h:297,u:'mm',r:1.414,ctx:'Opens to A3 spread'},{n:'Letter Bi-fold',w:11,h:8.5,u:'in',r:1.294,ctx:'US fold'}],
+  'brochure-tri':[{n:'A4 Tri-fold',w:630,h:297,u:'mm',r:2.12,ctx:'3 equal panels'},{n:'Letter Tri-fold',w:8.5,h:11,u:'in',r:.773,ctx:'US rack brochure'}],
+  magazine:[{n:'A4',w:210,h:297,u:'mm',r:.707,ctx:'International magazine'},{n:'8.5×11"',w:8.5,h:11,u:'in',r:.773,ctx:'US magazine'},{n:'Digest 5.5×8.5"',w:5.5,h:8.5,u:'in',r:.647,ctx:'Compact digest'}],
+  report:[{n:'A4',w:210,h:297,u:'mm',r:.707,ctx:'International'},{n:'Letter',w:8.5,h:11,u:'in',r:.773,ctx:'US standard'}],
+  portfolio:[{n:'A4',w:210,h:297,u:'mm',r:.707,ctx:'Print portfolio'},{n:'Letter',w:8.5,h:11,u:'in',r:.773,ctx:'US portfolio'},{n:'Square 8×8"',w:8,h:8,u:'in',r:1,ctx:'Square book'}],
+  catalog:[{n:'A4',w:210,h:297,u:'mm',r:.707,ctx:'Standard catalog'},{n:'Letter',w:8.5,h:11,u:'in',r:.773,ctx:'US catalog'}],
+  booklet:[{n:'A5',w:148,h:210,u:'mm',r:.704,ctx:'Saddle-stitch'},{n:'Half-letter',w:5.5,h:8.5,u:'in',r:.647,ctx:'US booklet'}],
+  'biz-card':[{n:'Standard 3.5×2"',w:3.5,h:2,u:'in',r:1.75,ctx:'Universal wallet size'},{n:'Square 2.5×2.5"',w:2.5,h:2.5,u:'in',r:1,ctx:'Square card'},{n:'EU 85×55mm',w:85,h:55,u:'mm',r:1.545,ctx:'European standard'}],
+  letterhead:[{n:'A4',w:210,h:297,u:'mm',r:.707,ctx:'International letterhead'},{n:'Letter',w:8.5,h:11,u:'in',r:.773,ctx:'US letterhead'}],
+  envelope:[{n:'#10',w:9.5,h:4.13,u:'in',r:2.3,ctx:'Standard US business'},{n:'DL (110×220mm)',w:220,h:110,u:'mm',r:2,ctx:'EU standard'},{n:'C5 (162×229mm)',w:162,h:229,u:'mm',r:.708,ctx:'Fits folded A4'}],
+  sticker:[{n:'Circle 2"',w:2,h:2,u:'in',r:1,ctx:'Round sticker'},{n:'Rect 3×4"',w:4,h:3,u:'in',r:1.333,ctx:'Label / packaging'},{n:'A6 Sheet',w:148,h:105,u:'mm',r:1.41,ctx:'Full sticker sheet'}],
+  packaging:[{n:'Custom',w:0,h:0,u:'mm',r:1,ctx:'Set your own dimensions'}],
+  label:[{n:'Custom',w:0,h:0,u:'mm',r:1,ctx:'Set your own dimensions'}],
+  'social-post':[{n:'IG Square',w:1080,h:1080,u:'px',r:1,ctx:'Standard IG feed'},{n:'IG Portrait 4:5',w:1080,h:1350,u:'px',r:.8,ctx:'Best reach on IG'},{n:'IG Story',w:1080,h:1920,u:'px',r:.5625,ctx:'IG / FB / TikTok story'},{n:'Facebook Post',w:1200,h:628,u:'px',r:1.91,ctx:'FB feed image'},{n:'Twitter / X',w:1600,h:900,u:'px',r:1.78,ctx:'Twitter in-stream'}],
+  thumbnail:[{n:'720p',w:1280,h:720,u:'px',r:1.778,ctx:'Standard HD thumb'},{n:'1080p',w:1920,h:1080,u:'px',r:1.778,ctx:'Full HD thumb'}],
+  infographic:[{n:'Tall 800×2000',w:800,h:2000,u:'px',r:.4,ctx:'Vertical scroll'},{n:'Wide 1200×628',w:1200,h:628,u:'px',r:1.91,ctx:'Social share graphic'},{n:'Square 1080',w:1080,h:1080,u:'px',r:1,ctx:'Feed infographic'}],
+  'digital-poster':[{n:'FHD 1920×1080',w:1920,h:1080,u:'px',r:1.778,ctx:'TV / screen'},{n:'4K 3840×2160',w:3840,h:2160,u:'px',r:1.778,ctx:'4K display'},{n:'Square 1080',w:1080,h:1080,u:'px',r:1,ctx:'Square screen'}],
+  'email-header':[{n:'600×200px',w:600,h:200,u:'px',r:3,ctx:'Standard email header'},{n:'600×300px',w:600,h:300,u:'px',r:2,ctx:'Taller hero banner'}],
+  'event-poster':[{n:'A3',w:297,h:420,u:'mm',r:.707,ctx:'Standard event poster'},{n:'A2',w:420,h:594,u:'mm',r:.707,ctx:'Large venue'},{n:'18×24"',w:18,h:24,u:'in',r:.75,ctx:'US gig poster'}],
+  'event-flyer':[{n:'A5',w:148,h:210,u:'mm',r:.704,ctx:'Handout flyer'},{n:'Half-letter',w:5.5,h:8.5,u:'in',r:.647,ctx:'US handout'}],
+  'social-event':[{n:'1080×1080px',w:1080,h:1080,u:'px',r:1,ctx:'Square event card'},{n:'1080×1920px',w:1080,h:1920,u:'px',r:.5625,ctx:'Story card'}],
+  ticket:[{n:'5.5×2"',w:5.5,h:2,u:'in',r:2.75,ctx:'Standard ticket'},{n:'A7 (105×74mm)',w:105,h:74,u:'mm',r:1.419,ctx:'Small voucher'}],
+};
+
+const CPX={poster:{w:560,h:794},flyer:{w:460,h:652},menu:{w:540,h:764},invitation:{w:400,h:560},banner:{w:860,h:286},certificate:{w:764,h:540},resume:{w:540,h:764},'brochure-bi':{w:860,h:608},'brochure-tri':{w:1060,h:498},magazine:{w:540,h:764},report:{w:540,h:764},portfolio:{w:540,h:540},catalog:{w:540,h:764},booklet:{w:460,h:652},'biz-card':{w:400,h:228},letterhead:{w:540,h:764},envelope:{w:700,h:304},sticker:{w:280,h:280},packaging:{w:580,h:580},label:{w:460,h:230},'social-post':{w:580,h:580},thumbnail:{w:700,h:394},infographic:{w:460,h:860},'digital-poster':{w:780,h:438},'email-header':{w:580,h:194},'event-poster':{w:560,h:794},'event-flyer':{w:460,h:652},'social-event':{w:580,h:580},ticket:{w:640,h:232}};
+
+const INTENTS=[{id:'announce',l:'Announce an event',ico:'📣'},{id:'promote',l:'Promote something',ico:'🚀'},{id:'inform',l:'Share information',ico:'📚'},{id:'sell',l:'Sell a product',ico:'🛒'},{id:'brand',l:'Build brand presence',ico:'✨'},{id:'celebrate',l:'Celebrate something',ico:'🎉'},{id:'showcase',l:'Show off my work',ico:'🎨'},{id:'instruct',l:'Give instructions',ico:'📌'}];
+
+/* ═══════════════════════════════
+   COLOUR HELPERS
+═══════════════════════════════ */
+function hslToHex(h,s,l){
+  h=((h%360)+360)%360; s/=100; l/=100;
+  const a=s*Math.min(l,1-l);
+  const f=n=>{const k=(n+h/30)%12;const c=l-a*Math.max(Math.min(k-3,9-k,1),-1);return Math.round(255*c).toString(16).padStart(2,'0')};
+  return '#'+f(0)+f(8)+f(4);
+}
+function hslPalette(baseH, stops){
+  return stops.map(([h,s,l])=>hslToHex(h,s,l));
+}
+function shiftPalette(theme, hueShift){
+  if(typeof theme.palette(0)[0]==='string' && !theme.palette(0)[0].startsWith('#')){
+    return theme.palette(hueShift);
+  }
+  return theme.palette(hueShift);
+}
+
+/* ═══════════════════════════════
+   STATE
+═══════════════════════════════ */
+const S={
+  name:'Untitled_Project',
+  cat:null,type:null,sizeObj:null,
+  customW:null,customH:null,customUnit:'mm',
+  intent:null,
+  themeId:null,themeObj:null,
+  fontId:null,fontObj:null,
+  hueShift:0,
+  images:[],
+  rawText:'',parsedText:[],textCommitted:false,
+  pages:1,
+};
+let pendingImgIdx=null, cvEl=null, drawTimer=null, theme='dark';
+const $=id=>document.getElementById(id);
+
+/* ═══════════════════════════════
+   THEME & RESIZABLE PANELS
+═══════════════════════════════ */
+$('btn-theme').addEventListener('click',()=>{
+  theme=theme==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',theme);
+  $('btn-theme').textContent=theme==='dark'?'🌙':'☀️';
+  schedDraw();
+});
+
+function makeResizable(handleEl, panelEl, side){
+  let dragging=false,startX=0,startW=0;
+  handleEl.addEventListener('mousedown',e=>{dragging=true;startX=e.clientX;startW=panelEl.offsetWidth;handleEl.classList.add('dragging');document.body.style.cursor='col-resize';document.body.style.userSelect='none';e.preventDefault();});
+  document.addEventListener('mousemove',e=>{
+    if(!dragging)return;
+    const dx=side==='left'?e.clientX-startX:startX-e.clientX;
+    const nw=Math.max(220,Math.min(520,startW+dx));
+    panelEl.style.width=nw+'px';
+    const lw=$('left').offsetWidth, rw=$('right').offsetWidth;
+    $('shell').style.gridTemplateColumns=`${lw}px 1fr ${rw}px`;
+  });
+  document.addEventListener('mouseup',()=>{if(dragging){dragging=false;handleEl.classList.remove('dragging');document.body.style.cursor='';document.body.style.userSelect='';}});
+}
+makeResizable($('rh-l'),$('left'),'left');
+makeResizable($('rh-r'),$('right'),'right');
+
+/* ═══════════════════════════════
+   PANEL TABS
+═══════════════════════════════ */
+document.querySelectorAll('.ptab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.ptab').forEach(x=>x.classList.remove('on'));t.classList.add('on');
+  $('tab-setup').style.display=t.dataset.tab==='setup'?'flex':'none';
+  $('tab-layers').style.display=t.dataset.tab==='layers'?'flex':'none';
+  $('tab-pages').style.display=t.dataset.tab==='pages'?'flex':'none';
+}));
+$('tab-setup').style.display='flex';
+
+/* ═══════════════════════════════
+   TOOL BUTTONS
+═══════════════════════════════ */
+document.querySelectorAll('.tb[data-t]').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.tb[data-t]').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+}));
+
+/* ═══════════════════════════════
+   FILENAME
+═══════════════════════════════ */
+const fnEl=$('fname');
+fnEl.addEventListener('input',()=>{S.name=fnEl.textContent.trim()||'Untitled_Project';updateDocInfo();});
+fnEl.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();fnEl.blur();}});
+
+/* ═══════════════════════════════
+   ACCORDION: COLLAPSE STEP
+═══════════════════════════════ */
+function collapseStep(stepId){
+  const step=$(stepId);
+  step.classList.add('collapsed');
+}
+function expandStep(stepId){
+  const step=$(stepId);
+  step.classList.remove('collapsed');
+}
+// Clicking summary toggles open
+['step-cat','step-type','step-size','step-intent','step-theme','step-fonts'].forEach(id=>{
+  const ss=$(id).querySelector('.step-summary');
+  if(!ss)return;
+  let isOpen=false;
+  ss.addEventListener('click',()=>{
+    if(!isOpen){expandStep(id);isOpen=true;}
+    else{collapseStep(id);isOpen=false;}
+  });
+  // Track state via class
+  const obs=new MutationObserver(()=>{isOpen=!$(id).classList.contains('collapsed');});
+  obs.observe($(id),{attributes:true,attributeFilter:['class']});
+});
+
+/* ═══════════════════════════════
+   STEP REVEAL & DONE
+═══════════════════════════════ */
+function revealStep(id){
+  const el=$(id);
+  if(!el.classList.contains('visible')){
+    el.classList.add('visible');
+    setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
+  }
+}
+function markDone(stepId,previewText){
+  const sp=$(stepId);
+  const prev=sp.querySelector('.ss-preview');
+  if(prev&&previewText)prev.textContent=previewText;
+  collapseStep(stepId);
+}
+
+/* ═══════════════════════════════
+   STEP 1: CATEGORIES
+═══════════════════════════════ */
+function buildCats(){
+  const el=$('cat-grid');
+  el.innerHTML=CATS.map(c=>`<div class="cat-card${S.cat===c.id?' on':''}" data-id="${c.id}"><div class="sel-dot"></div><div class="cat-prev">${c.svg}</div><div class="cat-foot"><span class="cat-ico">${c.ico}</span><span class="cat-name">${c.name}</span></div></div>`).join('');
+  el.querySelectorAll('.cat-card').forEach(card=>card.addEventListener('click',()=>{
+    el.querySelectorAll('.cat-card').forEach(x=>x.classList.remove('on'));card.classList.add('on');
+    S.cat=card.dataset.id;S.type=null;S.sizeObj=null;
+    const cat=CATS.find(c=>c.id===S.cat);
+    $('ssp-cat').textContent=cat.name;
+    markDone('step-cat',cat.name);
+    buildTypes();revealStep('step-type');
+    $('step-type-title').textContent=cat.name+' formats';
+    updateDocInfo();checkCanvas();
+  }));
+}
+
+/* ═══════════════════════════════
+   STEP 2: TYPES
+═══════════════════════════════ */
+function buildTypes(){
+  const cat=CATS.find(c=>c.id===S.cat);if(!cat)return;
+  const el=$('type-grid');
+  el.innerHTML=cat.types.map(t=>`<div class="chip${S.type===t.id?' on':''}" data-id="${t.id}"><div class="chip-dot"></div><span class="ch-ico">${t.ico}</span><div><span class="ch-name">${t.n}</span><span class="ch-dim">${t.dim}</span></div></div>`).join('');
+  el.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
+    el.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');
+    S.type=c.dataset.id;S.sizeObj=null;
+    const to=cat.types.find(t=>t.id===c.dataset.id);
+    $('ssp-type').textContent=to.ico+' '+to.n;
+    markDone('step-type',to.ico+' '+to.n);
+    buildSizes();revealStep('step-size');
+    updateDocInfo();checkCanvas();
+  }));
+}
+
+/* ═══════════════════════════════
+   STEP 3: SIZES
+═══════════════════════════════ */
+function buildSizes(){
+  const sizes=(S.type&&SIZES_DB[S.type])||[];
+  const el=$('size-grid');
+  el.innerHTML=sizes.map((s,i)=>{
+    const r=s.r;let rw,rh;
+    if(r>=1){rw=32;rh=Math.max(6,Math.round(32/r));}else{rh=32;rw=Math.max(6,Math.round(32*r));}
+    rw=Math.min(rw,48);rh=Math.min(rh,48);
+    return `<div class="sz-card${S.sizeObj&&S.sizeObj.n===s.n?' on':''}" data-i="${i}"><div class="sz-dot"></div><div class="sz-prev"><div class="sz-rect" style="width:${rw}px;height:${rh}px"></div></div><div class="sz-name">${s.n}</div><div class="sz-dims">${s.w}${s.u==='px'?'px':s.u}×${s.h}${s.u==='px'?'px':s.u}</div><div class="sz-ctx">${s.ctx}</div></div>`;
+  }).join('');
+  el.querySelectorAll('.sz-card').forEach((c,i)=>c.addEventListener('click',()=>{
+    el.querySelectorAll('.sz-card').forEach(x=>x.classList.remove('on'));c.classList.add('on');
+    S.sizeObj=sizes[i];S.customW=null;S.customH=null;
+    $('csr').classList.remove('open');$('csr').querySelector('.csr-inp').style.display='';$('csr').querySelector('.csr-lbl').style.display='';
+    $('ssp-size').textContent=sizes[i].n;
+    markDone('step-size',sizes[i].n);
+    buildIntents();revealStep('step-intent');
+    updateDocInfo();checkCanvas();schedDraw();
+  }));
+}
+
+// Custom size
+$('csr').querySelector('.csr-lbl').addEventListener('click',()=>$('csr').classList.add('open'));
+function updateCustomSize(){
+  const w=parseFloat($('cdw').value),h=parseFloat($('cdh').value),u=$('cdu').value;
+  if(w>0&&h>0){
+    S.customW=w;S.customH=h;S.customUnit=u;S.sizeObj=null;
+    $('size-grid').querySelectorAll('.sz-card').forEach(x=>x.classList.remove('on'));
+    const lbl=`${w}×${h} ${u}`;
+    $('ssp-size').textContent=lbl;
+    markDone('step-size',lbl);
+    revealStep('step-intent');
+    updateDocInfo();checkCanvas();schedDraw();
+  }
+}
+$('cdw').addEventListener('input',updateCustomSize);
+$('cdh').addEventListener('input',updateCustomSize);
+$('cdu').addEventListener('change',updateCustomSize);
+
+/* ═══════════════════════════════
+   STEP 4: INTENT
+═══════════════════════════════ */
+function buildIntents(){
+  const el=$('intent-grid');
+  el.innerHTML=INTENTS.map(i=>`<div class="int-chip${S.intent===i.id?' on':''}" data-id="${i.id}"><span>${i.ico}</span><span>${i.l}</span></div>`).join('');
+  el.querySelectorAll('.int-chip').forEach(c=>c.addEventListener('click',()=>{
+    el.querySelectorAll('.int-chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');S.intent=c.dataset.id;
+    const it=INTENTS.find(i=>i.id===c.dataset.id);
+    $('ssp-intent').textContent=it.ico+' '+it.l;
+    markDone('step-intent',it.ico+' '+it.l);
+    buildThemes();revealStep('step-theme');
+    updateDocInfo();schedDraw();
+  }));
+}
+
+/* ═══════════════════════════════
+   STEP 5: THEMES
+═══════════════════════════════ */
+function buildThemes(){
+  const el=$('harmony-section');el.innerHTML='';
+  HARMONIES.forEach((harm,hi)=>{
+    const group=document.createElement('div');group.className='harmony-group';
+    // Determine if any theme here matches current intent
+    const bestMatch=harm.themes.find(t=>t.intents.includes(S.intent))||harm.themes[0];
+    const isRecommended=harm.themes.some(t=>t.intents.includes(S.intent));
+
+    group.innerHTML=`<div class="hg-head"><div style="flex:1"><div class="hg-label">${harm.label}${isRecommended?` <span style="font-size:9px;background:var(--acc-s);color:var(--acc);border:1px solid var(--acc-b);border-radius:3px;padding:1px 5px;letter-spacing:.05em;vertical-align:middle">Recommended</span>`:''}</div><div class="hg-sub">${harm.sub}</div></div><div class="hg-arr">›</div></div><div class="hg-body"></div>`;
+    const head=group.querySelector('.hg-head');
+    const body=group.querySelector('.hg-body');
+
+    // Open recommended by default
+    if(isRecommended){group.classList.add('open');}
+
+    head.addEventListener('click',()=>group.classList.toggle('open'));
+
+    // Best theme (shown first)
+    body.appendChild(makeThemeCard(bestMatch,true));
+
+    // Alternates
+    const alts=harm.themes.filter(t=>t.id!==bestMatch.id);
+    if(alts.length){
+      const altToggle=document.createElement('div');
+      altToggle.className='alts-toggle';
+      altToggle.innerHTML=`<span>›</span> ${alts.length} more option${alts.length>1?'s':''}`;
+      const altGrid=document.createElement('div');
+      altGrid.className='alts-grid';
+      alts.forEach(t=>altGrid.appendChild(makeThemeCard(t,false)));
+      altToggle.addEventListener('click',()=>{
+        altGrid.classList.toggle('open');
+        altToggle.querySelector('span').textContent=altGrid.classList.contains('open')?'∨':'›';
+      });
+      body.appendChild(altToggle);
+      body.appendChild(altGrid);
+    }
+    el.appendChild(group);
+  });
+  updateHuePreview();
+}
+
+function makeThemeCard(themeObj, isBest){
+  const pal=themeObj.palette(S.hueShift);
+  const card=document.createElement('div');
+  card.className='theme-card'+(S.themeId===themeObj.id?' on':'');
+  card.innerHTML=`
+    <div class="tc-preview">
+      ${pal.slice(0,4).map(c=>`<div class="tc-color-bar" style="background:${c}"></div>`).join('')}
+      <div class="tc-overlay"><div class="tc-title-demo"></div><div class="tc-body-demo"></div><div class="tc-body-demo2"></div></div>
+    </div>
+    <div class="tc-foot">
+      <div>
+        <div class="tc-name">${themeObj.name}</div>
+        <div class="tc-font">${themeObj.typography.personality}</div>
+      </div>
+      <div class="tc-dot"></div>
+    </div>`;
+  card.addEventListener('click',()=>{
+    document.querySelectorAll('.theme-card').forEach(x=>x.classList.remove('on'));
+    card.classList.add('on');
+    S.themeId=themeObj.id;S.themeObj=themeObj;
+    $('ssp-theme').textContent=themeObj.name;
+    $('ud-theme').classList.add('has');
+    markDone('step-theme',themeObj.name);
+    // Auto-suggest font from theme
+    suggestFont(themeObj.typography.personality);
+    revealStep('step-fonts');
+    revealStep('step-stuff');
+    updateDocInfo();updateStuff();schedDraw();
+  });
+  return card;
+}
+
+function suggestFont(personality){
+  const match=FONT_PERSONALITIES.find(f=>f.label===personality);
+  if(match&&!S.fontId){
+    S.fontId=match.id;S.fontObj=match;
+    // Update font grid selection if visible
+    document.querySelectorAll('.font-card').forEach(c=>c.classList.toggle('on',c.dataset.id===match.id));
+    $('ssp-fonts').textContent=match.label;
+  }
+}
+
+/* ═══════════════════════════════
+   STEP 6: FONTS
+═══════════════════════════════ */
+function buildFonts(){
+  const el=$('font-grid');el.innerHTML='';
+  const sampleText=S.parsedText.find(p=>p.tag==='title')?.val||'Design';
+  FONT_PERSONALITIES.forEach(fp=>{
+    const card=document.createElement('div');
+    card.className='font-card'+(S.fontId===fp.id?' on':'');
+    card.dataset.id=fp.id;
+    card.innerHTML=`<div class="fc-dot"></div><div class="fc-sample" style="font-family:'${fp.sampleFont}',serif">${sampleText.split(' ')[0]||fp.sample}</div><div class="fc-name">${fp.label}</div><div class="fc-pair">${fp.display} + ${fp.body}</div>`;
+    card.addEventListener('click',()=>{
+      document.querySelectorAll('.font-card').forEach(x=>x.classList.remove('on'));
+      card.classList.add('on');
+      S.fontId=fp.id;S.fontObj=fp;
+      $('ssp-fonts').textContent=fp.label;
+      markDone('step-fonts',fp.label);
+      schedDraw();
+    });
+    el.appendChild(card);
+  });
+}
+
+/* ═══════════════════════════════
+   HUE SLIDER
+═══════════════════════════════ */
+const hueSlider=$('hue-slider');
+hueSlider.addEventListener('input',()=>{
+  S.hueShift=parseInt(hueSlider.value);
+  $('hue-val').textContent=S.hueShift+'°';
+  updateHuePreview();
+  // Rebuild theme cards with new hue
+  if(S.intent)buildThemes();
+  schedDraw();
+});
+
+function updateHuePreview(){
+  const previewEl=$('hue-preview');
+  if(!previewEl)return;
+  // Show current active palette or default analogous
+  const pal=S.themeObj?S.themeObj.palette(S.hueShift):
+    [0,60,120,180,240].map(offset=>hslToHex((S.hueShift+offset)%360,65,50));
+  previewEl.innerHTML=pal.slice(0,5).map(c=>`<div class="hp-swatch" style="background:${c}"></div>`).join('');
+}
+
+/* ═══════════════════════════════
+   IMAGES
+═══════════════════════════════ */
+const dz=$('dz'),fi=$('fi');
+dz.addEventListener('click',()=>fi.click());
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('over');});
+dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
+dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('over');Array.from(e.dataTransfer.files).forEach(f=>{if(f.type.startsWith('image/')){const r=new FileReader();r.onload=ev=>addImg(ev.target.result);r.readAsDataURL(f);}});});
+fi.addEventListener('change',()=>{Array.from(fi.files).forEach(f=>{const r=new FileReader();r.onload=ev=>addImg(ev.target.result);r.readAsDataURL(f);});fi.value='';});
+$('url-btn').addEventListener('click',()=>{const u=$('url-inp').value.trim();if(u){addImg(u);$('url-inp').value='';}});
+$('url-inp').addEventListener('keydown',e=>{if(e.key==='Enter')$('url-btn').click();});
+
+function addImg(url){
+  const img=new Image();img.crossOrigin='anonymous';
+  const done=()=>{
+    S.images.push({url,role:S.images.length===0?'focal':'support',imgEl:img});
+    renderImgs();
+    if(S.images.length===1&&!S.themeId)suggestThemeFromImage();
+    updateStuff();schedDraw();
+  };
+  img.onload=done;
+  img.onerror=()=>{const i2=new Image();i2.onload=()=>{S.images.push({url,role:S.images.length===0?'focal':'support',imgEl:i2});renderImgs();if(S.images.length===1&&!S.themeId)suggestThemeFromImage();updateStuff();schedDraw();};i2.onerror=()=>alert('Could not load that image.');i2.src=url;};
+  img.src=url;
+}
+
+function suggestThemeFromImage(){
+  // Suggest coastal/analogous theme as starting point
+  if(!S.themeId){
+    showToast('🎨','Image added — here are a few palette options that complement it.',
+      [{label:'See themes',action:()=>{revealStep('step-theme');$('tab-setup').scrollTop=9999;}},{label:'Keep browsing',action:null}]);
+  }
+}
+
+function renderImgs(){
+  const el=$('img-grid');el.innerHTML='';
+  const n=S.images.length;
+  $('img-status').textContent=n?`${n} image${n>1?'s':''} added`:'Drop a photo or paste a URL';
+  $('sc-img').classList.toggle('filled',n>0);
+  $('ud-img').classList.toggle('has',n>0);
+  S.images.forEach((im,i)=>{
+    const d=document.createElement('div');d.className='img-th';
+    const cls=im.role==='background'?'background':im.role==='support'?'support':'focal';
+    d.innerHTML=`<img src="${im.url}" alt=""/><div class="img-ov"><span class="irt ${cls}">${im.role}</span><span class="img-rm">✕</span></div>`;
+    d.querySelector('.img-rm').addEventListener('click',e=>{e.stopPropagation();S.images.splice(i,1);renderImgs();updateStuff();schedDraw();});
+    d.querySelector('img').addEventListener('click',()=>{pendingImgIdx=i;$('role-img').src=im.url;$('role-modal').classList.add('open');$('role-modal').querySelectorAll('.ro').forEach(r=>r.classList.toggle('on',r.dataset.r===im.role));});
+    el.appendChild(d);
+  });
+}
+
+$('role-modal').querySelectorAll('.ro').forEach(r=>r.addEventListener('click',()=>{
+  if(pendingImgIdx!==null)S.images[pendingImgIdx].role=r.dataset.r;
+  $('role-modal').classList.remove('open');renderImgs();schedDraw();
+}));
+$('role-modal').addEventListener('click',e=>{if(e.target===$('role-modal'))$('role-modal').classList.remove('open');});
+
+/* ═══════════════════════════════
+   TEXT — COMMIT PATTERN
+═══════════════════════════════ */
+const magicTA=$('magic-ta');
+magicTA.addEventListener('input',e=>{
+  S.rawText=e.target.value;
+  const hasText=S.rawText.trim().length>10;
+  $('parse-btn').classList.toggle('show',hasText);
+  $('apply-btn').style.display=S.rawText.trim()?'flex':'none';
+  $('ud-txt').classList.toggle('has',S.rawText.trim().length>0);
+  $('txt-status').textContent=S.rawText.trim()?'Draft ready — hit Apply when done':'Paste anything — we\'ll sort it out';
+  updateStuff();
+  // Don't draw on every keystroke — wait for Apply
+});
+
+$('parse-btn').addEventListener('click',()=>{
+  S.parsedText=magicParse(S.rawText);
+  renderParsed();
+  buildFonts(); // refresh font samples with real text
+  showToast('✦',`Parsed ${S.parsedText.length} content blocks — title, headings, body, dates all identified.`,
+    [{label:'Looks right',action:null},{label:'Re-parse',action:()=>{S.parsedText=magicParse(S.rawText);renderParsed();}}]);
+});
+
+$('apply-btn').addEventListener('click',()=>{
+  if(!S.rawText.trim())return;
+  if(!S.parsedText.length)S.parsedText=magicParse(S.rawText);
+  S.textCommitted=true;
+  $('sc-txt').classList.add('txt-committed');
+  renderCommittedPreview();
+  $('txt-status').textContent='Content applied ✓';
+  $('sc-txt').classList.add('filled');
+  $('ud-txt').classList.add('has');
+  updateStuff();schedDraw();
+  buildFonts();
+});
+
+$('edit-btn').addEventListener('click',()=>{
+  S.textCommitted=false;
+  $('sc-txt').classList.remove('txt-committed','filled');
+  $('txt-status').textContent='Editing…';
+  $('ud-txt').classList.remove('has');
+  updateStuff();
+});
+
+function renderParsed(){
+  const el=$('parsed-preview');
+  el.innerHTML=S.parsedText.map(p=>`<div class="pi"><span class="pt pt-${p.tag}">${p.tag}</span><span class="pv">${p.val}</span></div>`).join('');
+  el.classList.add('show');
+}
+
+function renderCommittedPreview(){
+  const el=$('tcp');
+  el.innerHTML=S.parsedText.slice(0,3).map(p=>`<div class="tcp-line"><span class="pt pt-${p.tag}" style="flex-shrink:0">${p.tag}</span><span class="pv" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.val}</span></div>`).join('');
+  if(S.parsedText.length>3){
+    const more=document.createElement('div');
+    more.className='tcp-count';
+    more.textContent=`+${S.parsedText.length-3} more blocks`;
+    el.appendChild(more);
+  }
+}
+
+function magicParse(text){
+  const lines=text.split('\n').map(l=>l.trim()).filter(Boolean);
+  const result=[];
+  const dateRx=/\b(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}|(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+\d{1,2}(?:st|nd|rd|th)?,?\s*\d{4})/i;
+  const timeRx=/\b\d{1,2}:\d{2}\s*(?:am|pm)?\b|\b\d{1,2}\s*(?:am|pm)\b/i;
+  const listRx=/^[-•·*]\s+.+/;
+  const allCaps=s=>s.length>2&&s===s.toUpperCase()&&/[A-Z]/.test(s);
+  const isShort=s=>s.split(' ').length<=8;
+  let hasTitle=false;
+  lines.forEach((line,idx)=>{
+    if(dateRx.test(line)||timeRx.test(line)){result.push({tag:'date',val:line});return;}
+    if(listRx.test(line)){result.push({tag:'list',val:line.replace(/^[-•·*]\s+/,'')});return;}
+    if(!hasTitle&&(idx===0||allCaps(line))&&isShort(line)){result.push({tag:'title',val:line});hasTitle=true;return;}
+    if(isShort(line)&&idx<4&&hasTitle){result.push({tag:'heading',val:line});return;}
+    result.push({tag:'body',val:line});
+  });
+  return result;
+}
+
+/* ═══════════════════════════════
+   UNLOCK STATE
+═══════════════════════════════ */
+function updateStuff(){
+  const hi=S.images.length>0,hth=!!S.themeId,ht=S.textCommitted||S.rawText.trim().length>0;
+  $('ud-img').classList.toggle('has',hi);
+  $('ud-theme').classList.toggle('has',hth);
+  $('ud-txt').classList.toggle('has',ht);
+  const any=hi||hth||ht;
+  $('u-txt').className='u-txt'+(any?' ready':'');
+  $('u-txt').textContent=any?'✓ Ready — canvas is live':'Add at least one to see your design';
+}
+
+function updateDocInfo(){
+  $('di-file').textContent=S.name||'—';
+  let tn='—';CATS.forEach(c=>c.types.forEach(t=>{if(t.id===S.type)tn=t.ico+' '+t.n;}));
+  $('di-type').textContent=tn;
+  let sn='—';if(S.sizeObj)sn=S.sizeObj.n;else if(S.customW&&S.customH)sn=`${S.customW}×${S.customH}${S.customUnit}`;
+  $('di-size').textContent=sn;
+  $('di-pages').textContent=S.pages;
+  const it=INTENTS.find(i=>i.id===S.intent);$('di-intent').textContent=it?it.l:'—';
+  $('di-theme').textContent=S.themeObj?S.themeObj.name:'—';
+}
+
+/* ═══════════════════════════════
+   CANVAS — ALWAYS LIVE
+═══════════════════════════════ */
+function toPx(v,u){const D=96;return u==='px'?v:u==='mm'?v*D/25.4:u==='cm'?v*D/2.54:u==='in'?v*D:u==='ft'?v*12*D:v;}
+
+function checkCanvas(){
+  if(!S.type)return;
+  const hasSize=S.sizeObj||(S.customW&&S.customH);
+  if(!hasSize)return;
+  initCanvas();
+}
+
+function initCanvas(){
+  const sz=CPX[S.type]||{w:540,h:764};
+  const area=$('ca');
+  const vw=area.clientWidth-60,vh=area.clientHeight-60;
+  const sc=Math.min(vw/sz.w,vh/sz.h,.9);
+  const dw=Math.round(sz.w*sc),dh=Math.round(sz.h*sc);
+  cvEl=$('cv');
+  cvEl.width=dw;cvEl.height=dh;
+  cvEl.style.width=dw+'px';cvEl.style.height=dh+'px';
+  cvEl.style.opacity='1';
+  $('cw').style.width=dw+'px';$('cw').style.height=dh+'px';
+  $('c-ph').classList.add('gone');
+  $('status-badge').textContent='LIVE';$('status-badge').className='badge live';
+  $('btn-refine').classList.add('show');
+  $('btn-exp').disabled=false;
+  $('props-sec').style.display='block';
+  $('hint-card').style.display='none';
+  schedDraw();
+}
+
+function schedDraw(){
+  clearTimeout(drawTimer);
+  drawTimer=setTimeout(()=>{if(cvEl)draw();},60);
+}
+
+/* ═══════════════════════════════
+   DRAW ENGINE
+═══════════════════════════════ */
+function getPal(){
+  if(S.themeObj)return S.themeObj.palette(S.hueShift);
+  return[hslToHex(S.hueShift,70,10),hslToHex(S.hueShift+10,60,22),hslToHex(S.hueShift+15,65,45),hslToHex(S.hueShift+5,55,72),hslToHex(S.hueShift-5,45,88)];
+}
+function getFont(role){
+  if(S.fontObj){return role==='display'?S.fontObj.display:S.fontObj.body;}
+  if(S.themeObj){return role==='display'?S.themeObj.typography.display:S.themeObj.typography.body;}
+  return role==='display'?'Cormorant Garamond':'Nunito';
+}
+function getScale(){
+  if(S.themeObj)return S.themeObj.scale;
+  return{title:{min:30,max:60,weight:700},heading:{min:18,max:34,weight:600},body:{min:12,max:15,weight:400},label:{min:9,max:11,weight:700}};
+}
+function isLight(hex){
+  try{const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return(r*299+g*587+b*114)/1000>128;}catch{return false;}
+}
+function wrapTxt(ctx,text,x,y,mw,lh){
+  if(!text)return y;const words=text.split(' ');let line='',cy=y;
+  for(let i=0;i<words.length;i++){const tl=line+words[i]+' ';if(ctx.measureText(tl).width>mw&&i>0){ctx.fillText(line.trim(),x,cy);line=words[i]+' ';cy+=lh;}else line=tl;}
+  if(line.trim())ctx.fillText(line.trim(),x,cy);return cy+lh;
+}
+
+function draw(){
+  if(!cvEl)return;
+  const ctx=cvEl.getContext('2d');
+  const W=cvEl.width,H=cvEl.height;
+  const pal=getPal();
+  const bg=pal[0]||'#1a1a2e';
+  const acc=pal[pal.length-1]||'#7c6af5';
+  const mid=pal[Math.floor(pal.length/2)]||pal[1]||acc;
+  const bgLight=isLight(bg);
+  const textCol=bgLight?'#111':'#fff';
+  const scale=getScale();
+  const dispFont=getFont('display');
+  const bodyFont=getFont('body');
+
+  ctx.clearRect(0,0,W,H);
+
+  // BG
+  const g=ctx.createLinearGradient(0,0,W*.5,H);
+  g.addColorStop(0,bg);g.addColorStop(1,pal[1]||bg);
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+
+  // Subtle grid
+  ctx.globalAlpha=.04;ctx.strokeStyle=acc;ctx.lineWidth=1;
+  const gs=Math.round(Math.min(W,H)/10);
+  for(let x=0;x<W;x+=gs){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=gs){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  ctx.globalAlpha=1;
+
+  // Geometry
+  ctx.globalAlpha=.08;ctx.strokeStyle=mid;ctx.lineWidth=Math.max(1.5,W*.0025);
+  ctx.beginPath();ctx.arc(W*.82,H*.18,Math.min(W,H)*.28,0,Math.PI*2);ctx.stroke();
+  ctx.globalAlpha=.06;ctx.strokeStyle=acc;
+  ctx.beginPath();ctx.arc(W*.1,H*.88,Math.min(W,H)*.16,0,Math.PI*2);ctx.stroke();
+  ctx.globalAlpha=1;
+
+  // Accent bar
+  const bh=Math.max(3,Math.round(H*.005));
+  ctx.fillStyle=acc;ctx.fillRect(0,0,W*.38,bh);
+  ctx.fillStyle=mid;ctx.fillRect(W*.38,0,W*.18,bh);
+
+  // BG image
+  const bgI=S.images.find(a=>a.role==='background');
+  if(bgI&&bgI.imgEl){ctx.globalAlpha=.2;ctx.drawImage(bgI.imgEl,0,0,W,H);ctx.globalAlpha=1;}
+
+  // Focal image
+  const foc=S.images.find(a=>a.role==='focal');
+  if(foc&&foc.imgEl){
+    const ar=foc.imgEl.naturalWidth/foc.imgEl.naturalHeight;
+    const fw=Math.round(W*.42),fh=Math.round(fw/ar);
+    const fx=Math.round(W*.54),fhc=Math.min(fh,H*.85),fy=Math.round((H-fhc)/2);
+    ctx.save();ctx.beginPath();
+    if(ctx.roundRect)ctx.roundRect(fx,fy,fw,fhc,fw*.022);else ctx.rect(fx,fy,fw,fhc);
+    ctx.clip();ctx.drawImage(foc.imgEl,fx,fy,fw,fhc);ctx.restore();
+  }
+
+  // Text
+  const hasFoc=!!(foc&&foc.imgEl);
+  const tw=hasFoc?W*.46:W*.88,tx=W*.07;let ty=H*.19;
+
+  const titleItem=S.parsedText.find(p=>p.tag==='title');
+  const headItem=S.parsedText.find(p=>p.tag==='heading');
+  const bodyItems=S.parsedText.filter(p=>['body','list','date'].includes(p.tag));
+  const titleTxt=titleItem?titleItem.val:(S.rawText?S.rawText.split('\n')[0].trim():'');
+  const headTxt=headItem?headItem.val:'';
+
+  if(titleTxt){
+    const maxSz=Math.min(scale.title.max,Math.round(W*.1));
+    const sz=Math.max(scale.title.min,Math.min(maxSz,Math.round(H*.085)));
+    ctx.font=`${scale.title.weight} ${sz}px '${dispFont}',Georgia,serif`;
+    ctx.fillStyle=textCol;ctx.globalAlpha=.95;
+    ty=wrapTxt(ctx,titleTxt,tx,ty+sz,tw,sz*1.18)+sz*.05;ctx.globalAlpha=1;
+  }
+
+  if(headTxt){
+    const sz=Math.max(scale.heading.min,Math.min(scale.heading.max,Math.round(H*.032)));
+    ctx.font=`${scale.heading.weight} ${sz}px '${bodyFont}',sans-serif`;
+    ctx.fillStyle=acc;ctx.globalAlpha=.88;
+    ty=wrapTxt(ctx,headTxt,tx,ty+sz*.5,tw,sz*1.5)+sz*.2;ctx.globalAlpha=1;
+  }
+
+  bodyItems.slice(0,5).forEach(item=>{
+    if(!item.val)return;
+    const sz=Math.max(scale.body.min,Math.min(scale.body.max,Math.round(H*.019)));
+    if(item.tag==='date'){ctx.font=`700 ${sz}px '${bodyFont}',sans-serif`;ctx.fillStyle=acc;ctx.globalAlpha=.85;}
+    else{ctx.font=`${scale.body.weight} ${sz}px '${bodyFont}',sans-serif`;ctx.fillStyle=textCol;ctx.globalAlpha=.52;}
+    ty=wrapTxt(ctx,(item.tag==='list'?'• ':'')+item.val,tx,ty+sz*.4,tw,sz*1.65)+sz*.3;ctx.globalAlpha=1;
+  });
+
+  // Skeleton placeholders if no text
+  if(!titleTxt&&!headTxt){
+    ctx.globalAlpha=.12;ctx.fillStyle=textCol;
+    const ph=[[H*.19,H*.09,tw*.8],[H*.31,H*.04,tw*.55],[H*.39,H*.025,tw*.9],[H*.43,H*.025,tw*.75]];
+    ph.forEach(([y,h,w])=>{ctx.beginPath();if(ctx.roundRect)ctx.roundRect(tx,y,w,h,3);else ctx.rect(tx,y,w,h);ctx.fill();});
+    ctx.globalAlpha=1;
+  }
+
+  // Watermark
+  const wsz=Math.max(7,Math.round(H*.012));
+  ctx.font=`400 ${wsz}px 'DM Mono',monospace`;ctx.fillStyle=textCol;ctx.globalAlpha=.1;
+  ctx.fillText(S.name||'Untitled',tx,H-wsz*2);ctx.globalAlpha=1;
+
+  // Bottom accent
+  ctx.fillStyle=acc;ctx.globalAlpha=.45;ctx.fillRect(0,H-bh,W*.16,bh);ctx.globalAlpha=1;
+
+  buildLayersList();
+}
+
+/* ═══════════════════════════════
+   REFINE
+═══════════════════════════════ */
+$('btn-refine').addEventListener('click',()=>{
+  const checks=[];
+  if(S.images.length>0&&!S.themeId)checks.push({ico:'🎨',msg:'You have images but no theme selected yet. A theme will tie your image and layout colors together.',opts:[{label:'Choose theme',action:()=>{revealStep('step-theme');expandStep('step-theme');}},{label:'Later',action:null}]});
+  if(S.textCommitted&&!S.fontId)checks.push({ico:'✏️',msg:'Content is applied but no font style chosen — the default is being used. A font personality would strengthen the design.',opts:[{label:'Pick fonts',action:()=>{revealStep('step-fonts');expandStep('step-fonts');}},{label:'Keep default',action:null}]});
+  if(S.images.length===0&&S.themeId)checks.push({ico:'🖼️',msg:'Adding an image can significantly improve how your design fills the canvas.',opts:[{label:'Add image',action:()=>{$('sc-img').classList.add('open');$('sc-img').querySelector('.sc-arr').style.transform='rotate(90deg)';}},{label:'Keep text only',action:null}]});
+  if(!checks.length)checks.push({ico:'✦',msg:'Design looks solid. You can export or keep refining.',opts:[{label:'Export PNG',action:()=>$('btn-exp').click()},{label:'Keep editing',action:null}]});
+  checks.forEach((c,i)=>setTimeout(()=>showToast(c.ico,c.msg,c.opts),i*200));
+});
+
+/* ═══════════════════════════════
+   EXPORT
+═══════════════════════════════ */
+$('btn-exp').addEventListener('click',()=>{
+  if(!cvEl)return;
+  const a=document.createElement('a');a.download=(S.name||'cre8')+'.png';a.href=cvEl.toDataURL('image/png');a.click();
+});
+
+/* ═══════════════════════════════
+   LAYERS
+═══════════════════════════════ */
+function buildLayersList(){
+  const el=$('tab-layers');if(!el||el.childElementCount>0)return;
+  [['🖼️','Background'],['📷','Focal Image'],['🔤','Title'],['✏️','Heading'],['📝','Body Copy'],['▭','Accent Shapes']].forEach(([ico,n],i)=>{
+    const d=document.createElement('div');d.className='layer-row'+(i===2?' on':'');
+    d.innerHTML=`<span style="font-size:13px">${ico}</span><span style="flex:1">${n}</span><span class="lvis">👁</span>`;
+    d.addEventListener('click',()=>{document.querySelectorAll('.layer-row').forEach(x=>x.classList.remove('on'));d.classList.add('on');$('props-sec').style.display='block';});
+    el.appendChild(d);
+  });
+}
+
+/* ═══════════════════════════════
+   PAGES
+═══════════════════════════════ */
+$('add-pg').addEventListener('click',()=>{
+  S.pages++;$('di-pages').textContent=S.pages;
+  const d=document.createElement('div');d.className='page-item';
+  d.innerHTML=`<span>📄</span><span style="flex:1">Page ${S.pages}</span>`;
+  d.addEventListener('click',()=>{document.querySelectorAll('.page-item').forEach(x=>x.classList.remove('on'));d.classList.add('on');});
+  $('pages-list').appendChild(d);
+});
+
+/* ═══════════════════════════════
+   TOASTS
+═══════════════════════════════ */
+function showToast(ico,msg,opts=[]){
+  const c=$('toasts');
+  const t=document.createElement('div');t.className='toast';
+  t.innerHTML=`<div class="t-ico">${ico}</div><div class="t-body"><div class="t-msg">${msg}</div>${opts.length?`<div class="t-opts">${opts.map((o,i)=>`<button class="t-opt${i===0?' primary':''}">${o.label}</button>`).join('')}</div>`:''}</div><button class="t-close">×</button>`;
+  t.querySelectorAll('.t-opt').forEach((b,i)=>b.addEventListener('click',()=>{if(opts[i]?.action)opts[i].action();dismiss(t);}));
+  t.querySelector('.t-close').addEventListener('click',()=>dismiss(t));
+  c.appendChild(t);setTimeout(()=>dismiss(t),9000);
+}
+function dismiss(t){t.classList.add('out');setTimeout(()=>t.remove(),240);}
+
+/* ═══════════════════════════════
+   RESIZE
+═══════════════════════════════ */
+window.addEventListener('resize',()=>{
+  if(cvEl&&S.type&&(S.sizeObj||(S.customW&&S.customH))){
+    clearTimeout(drawTimer);drawTimer=setTimeout(()=>{initCanvas();},120);
+  }
+});
+
+/* ═══════════════════════════════
+   INIT
+═══════════════════════════════ */
+buildCats();
+buildIntents();
+buildFonts();
+updateStuff();
+updateDocInfo();
+updateHuePreview();
+setTimeout(()=>$('splash').classList.add('out'),1400);
+
+// SW
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    const swCode=`const C='cre8-v2';self.addEventListener('install',e=>{self.skipWaiting();});self.addEventListener('activate',e=>{self.clients.claim();});self.addEventListener('fetch',e=>{if(e.request.url.includes('fonts.g')){e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||(fetch(e.request).then(res=>{c.put(e.request,res.clone());return res;})))));return;}e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)));});`;
+    const blob=new Blob([swCode],{type:'application/javascript'});
+    navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
+  });
+}
+</script>
 </body>
 </html>
