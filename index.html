@@ -301,6 +301,19 @@ button{cursor:pointer}
 .bg-swatch-label{font-size:8px;color:var(--dim);text-align:center;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bg-swatch-wrap{display:flex;flex-direction:column;cursor:pointer}
 .bg-swatch-wrap.on .bg-swatch{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc-b)}
+.bg-contrast-wrap{background:var(--surf2);border:1px solid var(--b1);border-radius:var(--r);padding:8px 9px;display:flex;flex-direction:column;gap:7px;margin-bottom:8px}
+.bg-contrast-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.bg-contrast-title{font-size:10px;font-weight:700;color:var(--txt)}
+.bg-contrast-ratio{font-family:var(--mono);font-size:10px;color:var(--soft)}
+.bg-contrast-ratio.pass{color:var(--grn)}
+.bg-contrast-ratio.fail{color:var(--red)}
+.bg-contrast-bar{height:7px;background:var(--surf3);border:1px solid var(--b2);border-radius:999px;overflow:hidden}
+.bg-contrast-fill{height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--ylw),var(--grn));transition:width .2s var(--ease)}
+.bg-tone-row{display:flex;align-items:center;gap:8px}
+.bg-tone-slider{flex:1;appearance:none;height:4px;border-radius:999px;background:var(--b2);outline:none}
+.bg-tone-slider::-webkit-slider-thumb{appearance:none;width:12px;height:12px;border-radius:50%;background:var(--acc);border:1px solid var(--acc2)}
+.bg-tone-meta{display:flex;justify-content:space-between;font-size:9px;color:var(--dim)}
+.bg-tone-value{font-family:var(--mono);font-size:10px;color:var(--soft);min-width:56px;text-align:right}
 .bg-custom-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
 .bg-color-picker-input{width:0;height:0;opacity:0;position:absolute;pointer-events:none}
 .bg-custom-label{display:flex;align-items:center;gap:7px;cursor:pointer;font-size:11px;color:var(--soft);transition:.15s}
@@ -521,7 +534,7 @@ button{cursor:pointer}
           <div style="display:flex;flex-direction:column;gap:6px">
             <!-- Images -->
             <div class="sc" id="sc-img">
-              <div class="sc-head"><span class="sc-ico">🖼️</span><div class="sc-info"><div class="sc-title">Images</div><div class="sc-status" id="img-status">Drop a photo or paste a URL</div></div><span class="sc-arr">›</span></div>
+              <div class="sc-head"><span class="sc-ico">&#128444;&#65039;</span><div class="sc-info"><div class="sc-title">Images</div><div class="sc-status" id="img-status">Drop a photo or paste a URL</div></div><span class="sc-arr"> </span></div>
               <div class="sc-body">
                 <div class="dz" id="dz"><div class="dz-ico">↑</div><div class="dz-t">Drop or click to upload</div><div class="dz-s">PNG · JPG · WEBP · SVG</div><input type="file" id="fi" accept="image/*" multiple style="display:none"/></div>
                 <div class="url-r"><input type="text" id="url-inp" placeholder="Or paste an image URL…"/><button class="url-b" id="url-btn">Load</button></div>
@@ -583,6 +596,18 @@ button{cursor:pointer}
           <!-- Colour options -->
           <div class="bg-section-lbl">Colour</div>
           <div class="bg-color-grid" id="bg-color-grid"></div>
+          <div class="bg-contrast-wrap">
+            <div class="bg-contrast-head">
+              <div class="bg-contrast-title">Luminance and contrast</div>
+              <div class="bg-contrast-ratio" id="bg-contrast-ratio">4.5:1 target</div>
+            </div>
+            <div class="bg-contrast-bar"><div class="bg-contrast-fill" id="bg-contrast-fill"></div></div>
+            <div class="bg-tone-row">
+              <input type="range" id="bg-tone-slider" class="bg-tone-slider" min="0" max="100" value="50"/>
+              <div class="bg-tone-value" id="bg-tone-value">Balanced</div>
+            </div>
+            <div class="bg-tone-meta"><span>Darker shades</span><span>Lighter shades</span></div>
+          </div>
 
           <!-- Custom colour picker -->
           <div class="bg-custom-row">
@@ -598,7 +623,7 @@ button{cursor:pointer}
           <div class="bg-img-zone" id="bg-img-zone">
             <input type="file" id="bg-fi" accept="image/*" style="display:none"/>
             <div class="bg-img-placeholder" id="bg-img-ph">
-              <div style="font-size:18px;opacity:.4">🖼️</div>
+              <div style="font-size:18px;opacity:.4">&#128444;&#65039;</div>
               <div style="font-size:11px;color:var(--dim)">Upload a background image</div>
             </div>
             <img id="bg-img-preview" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:var(--r)"/>
@@ -699,7 +724,7 @@ button{cursor:pointer}
     <div class="ro-opts">
       <div class="ro" data-r="focal"><span class="ro-ico">🎯</span><div><div class="ro-name">Focal Point</div><div class="ro-desc">The hero — featured prominently</div></div></div>
       <div class="ro" data-r="background"><span class="ro-ico">🌅</span><div><div class="ro-name">Background</div><div class="ro-desc">Fills the canvas behind content</div></div></div>
-      <div class="ro" data-r="support"><span class="ro-ico">🖼️</span><div><div class="ro-name">Supporting</div><div class="ro-desc">Secondary or accent image</div></div></div>
+      <div class="ro" data-r="support"><span class="ro-ico">&#128444;&#65039;</span><div><div class="ro-name">Supporting</div><div class="ro-desc">Secondary or accent image</div></div></div>
     </div>
   </div>
 </div>
@@ -847,6 +872,7 @@ const S={
   images:[],rawText:'',parsedText:[],textCommitted:false,
   intent:null,
   bgColor:'#ffffff',bgMode:'color', bgImgEl:null, bgReadability:'overlay',
+  bgTone:50,bgSeedHex:null,bgContrastRatio:0,bgTextOnBg:'#111111',
   themeId:null,themeObj:null,
   pages:1,
 };
@@ -963,7 +989,7 @@ function resetFrom(level){
     if(key==='type'){S.type=null;}
     if(key==='size'){S.sizeObj=null;S.customW=null;S.customH=null;}
     if(key==='intent'){S.intent=null;}
-    if(key==='bg'){S.bgColor='#ffffff';S.bgMode='color';S.bgImgEl=null;}
+    if(key==='bg'){S.bgColor='#ffffff';S.bgMode='color';S.bgImgEl=null;S.bgTone=50;S.bgSeedHex=null;S.bgContrastRatio=0;S.bgTextOnBg='#111111';}
     if(key==='theme'){S.themeId=null;S.themeObj=null;}
   });
 }
@@ -1205,95 +1231,149 @@ function buildIntents(){
 /* ══════════════════════════════════════
    STEP 6: BACKGROUND
 ══════════════════════════════════════ */
-function scoreBgCandidate(bgHex, imgEl){
-  // Returns a score 0-100 across all contrast relationships
-  // Higher = better pairing with the image and content
-  let score=0;
-
-  // 1. Image vs background — luminance separation (30 pts)
-  // Subject should be visible against bg — not blend in
-  if(imgEl){
-    const domHex=getDominantHex(imgEl);
-    const domLum=_luminance(_hexToRgb(domHex));
-    const bgLum=_luminance(_hexToRgb(bgHex));
-    const lumDiff=Math.abs(domLum-bgLum);
-    score+=Math.min(lumDiff*60, 30); // 0-30 pts
-
-    // 2. Hue separation between image and background (20 pts)
-    // Same hue but different lightness = monochromatic (ok)
-    // Different hue = more visual separation (better for most cases)
-    const domHsl=_rgbToHsl(_hexToRgb(domHex));
-    const bgHsl=_rgbToHsl(_hexToRgb(bgHex));
-    const hueDist=Math.min(Math.abs(domHsl.h-bgHsl.h),360-Math.abs(domHsl.h-bgHsl.h));
-    // Penalise near-identical hues with near-identical lightness (invisible)
-    if(hueDist<20 && lumDiff<0.1) score-=20;
-    // Reward meaningful hue separation
-    else if(hueDist>30) score+=Math.min((hueDist/180)*20, 20);
-  }
-
-  // 3. Text readability potential (30 pts)
-  // How easy will it be to find readable text colours on this bg?
-  // White and black are always safe — score them high
-  const bgLum2=_luminance(_hexToRgb(bgHex));
-  const toWhite=wcagContrast(bgHex,'#ffffff');
-  const toBlack=wcagContrast(bgHex,'#000000');
-  const bestTextContrast=Math.max(toWhite,toBlack);
-  score+=Math.min((bestTextContrast/21)*30, 30); // 0-30 pts
-
-  // 4. Extreme backgrounds (near-white or near-black) — reliable (10 pts)
-  if(bgLum2>0.85||bgLum2<0.05) score+=10;
-
-  // 5. Penalty: bg colour too close to pure grey (no personality) (-5 pts)
-  const bgHsl2=_rgbToHsl(_hexToRgb(bgHex));
-  if(bgHsl2.s<0.05 && bgLum2>0.1 && bgLum2<0.9) score-=5;
-
-  return Math.max(0,Math.min(100,score));
+function _toneToLightness(tone){
+  // Keep a safe range where both dark and light directions can reach 4.5
+  return _clamp(0.12+(tone/100)*0.78,0.04,0.96);
 }
-
-function bgScoreLabel(score){
-  if(score>=70) return{icon:'✓',cls:'bg-score-good'};
-  if(score>=45) return{icon:'~',cls:'bg-score-ok'};
-  return{icon:'',cls:''};
+function _pickTextForTone(tone){
+  return tone>=50?'#111111':'#ffffff';
+}
+function _contrastDetails(bgHex,tone){
+  const txt=_pickTextForTone(tone);
+  const ratio=wcagContrast(bgHex,txt);
+  return {ratio,text:txt,pass:ratio>=4.5};
+}
+function _shadeFromSeed(seedHex,tone){
+  const hsl=_rgbToHsl(_hexToRgb(seedHex));
+  return _rgbToHex(_hslToRgb({
+    h:hsl.h,
+    s:_clamp(hsl.s<0.08?hsl.s:Math.max(hsl.s,0.26),0,0.9),
+    l:_toneToLightness(tone)
+  }));
+}
+function _findPassingShade(seedHex,tone,minRatio=4.5){
+  const txt=_pickTextForTone(tone);
+  const hsl=_rgbToHsl(_hexToRgb(seedHex));
+  let l=_toneToLightness(tone);
+  const dir=tone>=50?1:-1;
+  let hex=_rgbToHex(_hslToRgb({h:hsl.h,s:_clamp(hsl.s<0.08?hsl.s:Math.max(hsl.s,0.26),0,0.9),l}));
+  let ratio=wcagContrast(hex,txt);
+  for(let i=0;i<24&&ratio<minRatio;i++){
+    l=_clamp(l+dir*0.025,0.04,0.96);
+    hex=_rgbToHex(_hslToRgb({h:hsl.h,s:_clamp(hsl.s<0.08?hsl.s:Math.max(hsl.s,0.26),0,0.9),l}));
+    ratio=wcagContrast(hex,txt);
+  }
+  return {hex,ratio,text:txt,pass:ratio>=minRatio};
+}
+function _ratioLabel(r){
+  if(!isFinite(r)||r<=0)return '—';
+  return `${r.toFixed(1)}:1`;
 }
 
 function buildBgColorGrid(){
   const grid=$('bg-color-grid');
   grid.innerHTML='';
   const suggestions=getBgSuggestions();
-  const imgEl=S.images.find(a=>a.role==='focal')?.imgEl||S.images.find(a=>a.imgEl)?.imgEl||null;
+  const tone=Number.isFinite(S.bgTone)?S.bgTone:50;
+  const swatches=[];
 
   suggestions.forEach(s=>{
-    const score=imgEl?scoreBgCandidate(s.hex,imgEl):50;
-    const{icon,cls}=bgScoreLabel(score);
+    const shade=_findPassingShade(s.hex,tone,4.5);
+    if(!shade.pass)return;
+    swatches.push({seedHex:s.hex,label:s.label,...shade});
+  });
+
+  if(!swatches.length){
+    const fallbackHex=_shadeFromSeed('#8891a5',tone);
+    const fb=_contrastDetails(fallbackHex,tone);
+    swatches.push({seedHex:'#8891a5',label:'Fallback',hex:fallbackHex,ratio:fb.ratio,text:fb.text,pass:fb.pass});
+  }
+
+  swatches.forEach(s=>{
+    const isOn=S.bgMode==='color'&&(
+      (S.bgSeedHex&&S.bgSeedHex.toLowerCase()===s.seedHex.toLowerCase()) ||
+      (!S.bgSeedHex&&S.bgColor.toLowerCase()===s.hex.toLowerCase())
+    );
     const wrap=document.createElement('div');
-    wrap.className='bg-swatch-wrap'+(S.bgColor===s.hex&&S.bgMode==='color'?' on':'');
+    wrap.className='bg-swatch-wrap'+(isOn?' on':'');
     wrap.innerHTML=`
-      <div class="bg-swatch" style="background:${s.hex}" title="${s.label} (${Math.round(score)})">
-        ${icon?`<span class="bg-score-icon ${cls}">${icon}</span>`:''}
+      <div class="bg-swatch" style="background:${s.hex}" title="${s.label} • ${_ratioLabel(s.ratio)}">
+        <span class="bg-score-icon ${s.ratio>=4.5?'bg-score-good':'bg-score-ok'}">${s.ratio>=4.5?'✓':'~'}</span>
       </div>
       <div class="bg-swatch-label">${s.label}</div>`;
     wrap.addEventListener('click',()=>{
       document.querySelectorAll('.bg-swatch-wrap').forEach(x=>x.classList.remove('on'));
       wrap.classList.add('on');
+      S.bgSeedHex=s.seedHex;
       S.bgColor=s.hex;S.bgMode='color';S.bgImgEl=null;
+      S.bgContrastRatio=s.ratio;
+      S.bgTextOnBg=s.text;
+      $('bg-custom-swatch').style.background=s.hex;
       $('bg-img-zone').classList.remove('has');
       $('bg-img-preview').style.display='none';
       $('bg-img-ph').style.display='flex';
       $('bg-readability-row').style.display='none';
-      const lbl=s.label.length>9?s.label.slice(0,9)+'…':s.label;
+      updateBgContrastMeter(S.bgColor,S.bgContrastRatio);
+      const lbl=`${s.label} ${_ratioLabel(s.ratio)}`;
       stepDone('bg','step-bg','ssv-bg',lbl);
       runExtraction();buildThemes();revealStep('step-theme');
       schedDraw();
     });
     grid.appendChild(wrap);
   });
+
+  // Keep selected hue in sync when tone slider moves
+  if(S.bgMode==='color'&&S.bgSeedHex){
+    const current=swatches.find(x=>x.seedHex.toLowerCase()===S.bgSeedHex.toLowerCase());
+    if(current){
+      S.bgColor=current.hex;
+      S.bgContrastRatio=current.ratio;
+      S.bgTextOnBg=current.text;
+      updateBgContrastMeter(S.bgColor,S.bgContrastRatio);
+      $('ssv-bg').textContent=`${current.label} ${_ratioLabel(current.ratio)}`;
+    }
+  }else if(S.bgMode==='color'){
+    const d=_contrastDetails(S.bgColor||'#ffffff',tone);
+    S.bgContrastRatio=d.ratio;
+    S.bgTextOnBg=d.text;
+    updateBgContrastMeter(S.bgColor||'#ffffff',d.ratio);
+  }
+}
+
+function updateBgContrastMeter(bgHex,forcedRatio){
+  const tone=Number.isFinite(S.bgTone)?S.bgTone:50;
+  const d=forcedRatio?{ratio:forcedRatio,text:S.bgTextOnBg||_pickTextForTone(tone)}:_contrastDetails(bgHex||'#ffffff',tone);
+  const ratio=d.ratio||0;
+  const ratioEl=$('bg-contrast-ratio');
+  const fillEl=$('bg-contrast-fill');
+  const toneEl=$('bg-tone-value');
+  ratioEl.textContent=`${_ratioLabel(ratio)} • target 4.5`;
+  ratioEl.classList.toggle('pass',ratio>=4.5);
+  ratioEl.classList.toggle('fail',ratio<4.5);
+  fillEl.style.width=`${Math.max(0,Math.min(100,(ratio/7)*100))}%`;
+  toneEl.textContent=tone<35?'Dark':tone>65?'Light':'Balanced';
 }
 
 let _bgStepInited=false;
 function buildBgStep(){
+  const slider=$('bg-tone-slider');
+  if(slider&&Number.isFinite(S.bgTone))slider.value=String(S.bgTone);
   buildBgColorGrid();
+  updateBgContrastMeter(S.bgColor,S.bgContrastRatio);
   if(_bgStepInited)return; // listeners already attached
   _bgStepInited=true;
+
+  // Luminance slider for shade generation
+  slider.addEventListener('input',e=>{
+    S.bgTone=parseInt(e.target.value,10)||50;
+    if(S.bgMode!=='image'){
+      buildBgColorGrid();
+      runExtraction();buildThemes();
+      schedDraw();
+    }else{
+      updateBgContrastMeter(S.bgColor,S.bgContrastRatio);
+    }
+  });
 
   // Custom colour picker
   const picker=$('bg-custom-picker');
@@ -1302,9 +1382,14 @@ function buildBgStep(){
   picker.addEventListener('input',e=>{
     const hex=e.target.value;
     swatch.style.background=hex;
+    S.bgSeedHex=null;
     S.bgColor=hex;S.bgMode='color';S.bgImgEl=null;
+    const d=_contrastDetails(hex,S.bgTone);
+    S.bgContrastRatio=d.ratio;
+    S.bgTextOnBg=d.text;
     document.querySelectorAll('.bg-swatch-wrap').forEach(x=>x.classList.remove('on'));
-    stepDone('bg','step-bg','ssv-bg','Custom');
+    updateBgContrastMeter(hex,d.ratio);
+    stepDone('bg','step-bg','ssv-bg',`Custom ${_ratioLabel(d.ratio)}`);
     runExtraction();buildThemes();revealStep('step-theme');
     schedDraw();
   });
@@ -1319,12 +1404,14 @@ function buildBgStep(){
       const img=new Image();
       img.onload=()=>{
         S.bgImgEl=img;S.bgMode='image';
+        S.bgSeedHex=null;
         $('bg-img-preview').src=ev.target.result;
         $('bg-img-preview').style.display='block';
         $('bg-img-ph').style.display='none';
         zone.classList.add('has');
         $('bg-readability-row').style.display='block';
         document.querySelectorAll('.bg-swatch-wrap').forEach(x=>x.classList.remove('on'));
+        updateBgContrastMeter('#1a1a1a');
         stepDone('bg','step-bg','ssv-bg','Image');
         runExtraction();buildThemes();revealStep('step-theme');
         schedDraw();
@@ -1521,13 +1608,101 @@ function wcagContrast(hex1,hex2){
 function ensureContrast(fgHex,bgHex,minRatio=4.5){
   let hsl=_rgbToHsl(_hexToRgb(fgHex));
   const bgLight=isLight(bgHex);
-  let hex=fgHex;
-  for(let i=0;i<20;i++){
-    if(wcagContrast(hex,bgHex)>=minRatio)return hex;
-    hsl={...hsl,l:bgLight?Math.max(hsl.l-0.05,0):Math.min(hsl.l+0.05,1)};
+  // Keep hue/sat identity and avoid hard jump to pure black/white.
+  const lMin=bgLight?0.06:0.50;
+  const lMax=bgLight?0.50:0.94;
+  hsl={...hsl,l:_clamp(hsl.l,lMin,lMax),s:_clamp(hsl.s,0.08,0.96)};
+  let hex=_rgbToHex(_hslToRgb(hsl));
+  let bestHex=hex;
+  let bestRatio=wcagContrast(hex,bgHex);
+  for(let i=0;i<28;i++){
+    const ratio=wcagContrast(hex,bgHex);
+    if(ratio>=minRatio)return hex;
+    if(ratio>bestRatio){bestRatio=ratio;bestHex=hex;}
+    hsl={...hsl,l:bgLight?_clamp(hsl.l-0.025,lMin,lMax):_clamp(hsl.l+0.025,lMin,lMax)};
     hex=_rgbToHex(_hslToRgb(hsl));
   }
-  return bgLight?'#000000':'#ffffff';
+  return bestHex;
+}
+function ensureRoleContrast(fgHex,bgHex,minRatio,role){
+  let hsl=_rgbToHsl(_hexToRgb(fgHex));
+  const bgLight=isLight(bgHex);
+  let hex=fgHex;
+  const tune={
+    title:{sMin:.28,sMax:.96,lOnLight:[.07,.30],lOnDark:[.70,.92],step:.02},
+    sub:  {sMin:.18,sMax:.88,lOnLight:[.12,.42],lOnDark:[.62,.86],step:.02},
+    body: {sMin:.10,sMax:.55,lOnLight:[.16,.46],lOnDark:[.55,.76],step:.018},
+    accent:{sMin:.35,sMax:.98,lOnLight:[.10,.48],lOnDark:[.60,.92],step:.02},
+  }[role]||{sMin:.12,sMax:.9,lOnLight:[.12,.42],lOnDark:[.62,.86],step:.02};
+  const [lMin,lMax]=bgLight?tune.lOnLight:tune.lOnDark;
+  hsl.s=_clamp(hsl.s,tune.sMin,tune.sMax);
+  hsl.l=_clamp(hsl.l,lMin,lMax);
+  let bestHex=hex;
+  let bestRatio=wcagContrast(hex,bgHex);
+  for(let i=0;i<34;i++){
+    if(wcagContrast(hex,bgHex)>=minRatio)return hex;
+    if(bgLight){
+      hsl.l=_clamp(hsl.l-tune.step,lMin,lMax);
+      if(role!=='body')hsl.s=_clamp(hsl.s+0.006,tune.sMin,tune.sMax);
+    }else{
+      hsl.l=_clamp(hsl.l+tune.step,lMin,lMax);
+      if(role!=='body')hsl.s=_clamp(hsl.s+0.007,tune.sMin,tune.sMax);
+    }
+    hex=_rgbToHex(_hslToRgb(hsl));
+    const ratio=wcagContrast(hex,bgHex);
+    if(ratio>bestRatio){bestRatio=ratio;bestHex=hex;}
+  }
+  // Last attempt: keep hue/saturation, nudge toward edge of allowed luminance
+  hsl.l=bgLight?lMin:lMax;
+  hex=_rgbToHex(_hslToRgb(hsl));
+  if(wcagContrast(hex,bgHex)>=minRatio)return hex;
+  // Never jump to pure white/black here; preserve theme hue identity.
+  return bestHex;
+}
+const ROLE_THRESHOLDS={title:4.5,sub:3.5,body:4.5,accent:3.0};
+const SOFT_ROLE_THRESHOLDS={title:4.5,sub:3.0,body:4.5,accent:2.5};
+function validateThemeRoles(roles,bgHex){
+  const ratios={
+    title:wcagContrast(roles.title,bgHex),
+    sub:wcagContrast(roles.sub,bgHex),
+    body:wcagContrast(roles.body,bgHex),
+    accent:wcagContrast(roles.accent,bgHex),
+  };
+  const pass=
+    ratios.title>=ROLE_THRESHOLDS.title &&
+    ratios.sub>=ROLE_THRESHOLDS.sub &&
+    ratios.body>=ROLE_THRESHOLDS.body &&
+    ratios.accent>=ROLE_THRESHOLDS.accent;
+  return{pass,ratios,minRatio:Math.min(ratios.title,ratios.sub,ratios.body,ratios.accent)};
+}
+function validateThemeRolesSoft(roles,bgHex){
+  const ratios={
+    title:wcagContrast(roles.title,bgHex),
+    sub:wcagContrast(roles.sub,bgHex),
+    body:wcagContrast(roles.body,bgHex),
+    accent:wcagContrast(roles.accent,bgHex),
+  };
+  const pass=
+    ratios.title>=SOFT_ROLE_THRESHOLDS.title &&
+    ratios.sub>=SOFT_ROLE_THRESHOLDS.sub &&
+    ratios.body>=SOFT_ROLE_THRESHOLDS.body &&
+    ratios.accent>=SOFT_ROLE_THRESHOLDS.accent;
+  return{pass,ratios,minRatio:Math.min(ratios.title,ratios.sub,ratios.body,ratios.accent)};
+}
+function validateStrictMonochrome(roles,seedHex){
+  const baseH=_rgbToHsl(_hexToRgb(seedHex||'#888888')).h;
+  const limits={
+    title:{minSat:0.18,maxHue:10},
+    sub:{minSat:0.14,maxHue:12},
+    body:{minSat:0.10,maxHue:14},
+    accent:{minSat:0.22,maxHue:10},
+  };
+  for(const role of ['title','sub','body','accent']){
+    const hsl=_rgbToHsl(_hexToRgb(roles[role]));
+    if(_hueDistance(hsl.h,baseH)>limits[role].maxHue)return false;
+    if(hsl.s<limits[role].minSat)return false;
+  }
+  return true;
 }
 
 /* ── Background suggestions — all viable options from image ── */
@@ -1540,11 +1715,24 @@ function getBgSuggestions(){
     seen.add(k);suggestions.push({hex,label});
   };
 
-  // Always: full neutral range
-  add('#ffffff','White');add('#fafaf8','Off-white');add('#f2efe9','Warm white');
-  add('#e8e4de','Stone');add('#d4cfc8','Greige');
-  add('#111111','Black');add('#1a1a1a','Near-black');add('#2c2c2c','Charcoal');
-  add('#3d3d3d','Dark grey');add('#555555','Mid grey');
+  // Always include neutral anchors + broad hue map
+  [
+    ['#f3f3f3','Neutral'],
+    ['#727272','Grey'],
+    ['#111111','Charcoal'],
+    ['#f2635f','Coral'],
+    ['#f39c33','Orange'],
+    ['#f0c44a','Amber'],
+    ['#a0c95f','Lime'],
+    ['#52b57f','Green'],
+    ['#11a8a0','Teal'],
+    ['#2a9ed8','Sky'],
+    ['#3f69d8','Blue'],
+    ['#6e5fce','Indigo'],
+    ['#9a64c9','Violet'],
+    ['#c468b7','Magenta'],
+    ['#d06b8a','Rose'],
+  ].forEach(([hex,label])=>add(hex,label));
 
   // Get image element — try focal first, then any image
   const imgEl=S.images.find(a=>a.role==='focal')?.imgEl
@@ -1552,66 +1740,16 @@ function getBgSuggestions(){
             ||null;
 
   if(imgEl){
-    // Extract palette — try full image not just center
-    const size=60;
-    const oc=document.createElement('canvas');oc.width=size;oc.height=size;
-    const ox=oc.getContext('2d');
-    ox.drawImage(imgEl,0,0,size,size);
-    const d=ox.getImageData(0,0,size,size).data;
-
-    // Collect ALL hue buckets with ANY saturation
-    const buckets={};
-    let totalPixels=0;
-    for(let i=0;i<d.length;i+=4){
-      const r=d[i],g=d[i+1],b=d[i+2],a=d[i+3];
-      if(a<50)continue;
-      totalPixels++;
-      const mx=Math.max(r,g,b),mn=Math.min(r,g,b),rng=mx-mn;
-      // Only skip truly achromatic (pure greys/whites/blacks)
-      if(mx<15||rng/Math.max(mx,1)<0.08)continue;
-      let h=0;
-      if(mx===r)h=60*(((g-b)/rng)%6);
-      else if(mx===g)h=60*((b-r)/rng+2);
-      else h=60*((r-g)/rng+4);
-      h=((h%360)+360)%360;
-      const s=rng/mx, l=(mx+mn)/510;
-      const w=Math.max(s,0.1)*(1-Math.abs(l-0.45)*0.8);
-      const bk=Math.round(h/15)*15;
-      if(!buckets[bk])buckets[bk]={h:0,s:0,l:0,w:0};
-      buckets[bk].h+=h*w;buckets[bk].s+=s*w;buckets[bk].l+=l*w;buckets[bk].w+=w;
-    }
-
-    // Pick top 5 distinct hues
-    const sorted=Object.values(buckets).filter(b=>b.w>0)
-      .sort((a,b)=>b.w-a.w).map(b=>({h:b.h/b.w,s:b.s/b.w,l:b.l/b.w}));
-    const hues=[];
-    for(const c of sorted){
-      if(hues.length>=5)break;
-      const near=hues.some(p=>Math.min(Math.abs(p.h-c.h),360-Math.abs(p.h-c.h))<20);
-      if(!near)hues.push(c);
-    }
-
-    // For each hue, generate full range of background options
-    hues.forEach(({h,s,l})=>{
-      const sat=Math.max(s,0.35); // ensure visible colour
-      add(_rgbToHex(_hslToRgb({h,s:Math.min(sat+0.15,0.95),l:0.06})),'Dark');
-      add(_rgbToHex(_hslToRgb({h,s:Math.min(sat+0.1,0.9), l:0.12})),'Deep');
-      add(_rgbToHex(_hslToRgb({h,s:Math.min(sat+0.05,0.85),l:0.18})),'Rich');
-      add(_rgbToHex(_hslToRgb({h,s:Math.min(sat,0.75),    l:0.28})),'Dark mid');
-      add(_rgbToHex(_hslToRgb({h,s:Math.min(sat,0.7),     l:0.40})),'Mid');
-      add(_rgbToHex(_hslToRgb({h,s:Math.max(sat-0.1,0.2), l:0.55})),'Vibrant');
-      add(_rgbToHex(_hslToRgb({h,s:Math.max(sat-0.15,0.2),l:0.68})),'Light mid');
-      add(_rgbToHex(_hslToRgb({h,s:Math.max(sat-0.2,0.15),l:0.80})),'Light');
-      add(_rgbToHex(_hslToRgb({h,s:Math.max(sat-0.28,0.08),l:0.90})),'Soft');
-      add(_rgbToHex(_hslToRgb({h,s:Math.max(sat-0.32,0.05),l:0.95})),'Pale');
-      // Complement
-      const ch=(h+180)%360;
-      add(_rgbToHex(_hslToRgb({h:ch,s:Math.min(sat,0.8),l:0.10})),'Contrast dark');
-      add(_rgbToHex(_hslToRgb({h:ch,s:Math.max(sat-0.2,0.12),l:0.88})),'Contrast light');
+    const imgStops=extractPalette(imgEl,8);
+    imgStops.forEach((hex,i)=>add(hex,`Image ${i+1}`));
+    imgStops.slice(0,4).forEach((hex,i)=>{
+      const hsl=_rgbToHsl(_hexToRgb(hex));
+      const comp=_rgbToHex(_hslToRgb({h:(hsl.h+180)%360,s:_clamp(Math.max(hsl.s,0.35),0.2,0.9),l:_clamp(hsl.l,0.25,0.75)}));
+      add(comp,`Alt ${i+1}`);
     });
   }
 
-  return suggestions.slice(0,40);
+  return suggestions.slice(0,20);
 }
 
 /* ── Core: build colour roles from one source colour + bg + harmony ── */
@@ -1669,22 +1807,15 @@ function buildRoles(imageH,bgHex,colorStyle,dominantHex){
   return roles;
 }
 
-/* ══════════════════════════════════════
-   BUILD THEMES
-   Extract 5 stops → check contrast → 
-   apply harmony → show only what works
-══════════════════════════════════════ */
 function buildThemes(){
   const el=$('harmony-section');el.innerHTML='';
   const imgEl=S.images.find(a=>a.role==='focal')?.imgEl||S.images[0]?.imgEl||null;
   const bgHex=(S.bgMode==='color'&&S.bgColor)?S.bgColor:'#1a1a1a';
 
-  // Extract the 5 real colour stops from the image
-  const stops=imgEl?extractPalette(imgEl,5):[];
+  // Seed from selected background colour first; image fallback for bg-image mode.
+  const stops=(S.bgMode==='color'&&S.bgColor)?[S.bgColor]:(imgEl?extractPalette(imgEl,5):[]);
 
   console.log('[cre8] buildThemes: imgEl=',!!imgEl,'bgHex=',bgHex,'stops=',stops);
-  // For each stop, find the best harmony that produces readable results
-  // We try all harmonies per stop, keep those that pass contrast ≥4.5 on title
   const themes=[];
   const usedIds=new Set();
 
@@ -1692,10 +1823,8 @@ function buildThemes(){
     HARMONIES.forEach(harm=>{
       harm.themes.forEach(t=>{
         if(usedIds.has(t.id))return;
-        // Use the most dominant stop as seed for harmony
         const domHex=stops[0];
         const roles=buildRoles(0,bgHex,{...t.colorStyle,_harmonyId:harm.id},domHex);
-        // Only include if title has good contrast
         const ratio=wcagContrast(roles.title,bgHex);
         if(ratio>=3.5){
           usedIds.add(t.id);
@@ -1704,7 +1833,6 @@ function buildThemes(){
       });
     });
   }else{
-    // No image — show all harmony themes with fallback colours
     HARMONIES.forEach(harm=>{
       harm.themes.forEach(t=>{
         const roles=buildRoles(0,bgHex,{...t.colorStyle,_harmonyId:harm.id},null);
@@ -1718,15 +1846,14 @@ function buildThemes(){
     return;
   }
 
-  // Render all passing themes in a simple grid — no system labels, no accordion
   const grid=document.createElement('div');grid.className='theme-grid';
-  themes.forEach(({t,harm,roles})=>{
+  themes.forEach(({t,harm,roles,domHex})=>{
     try{grid.appendChild(makeThemeCardEl({
       id:t.id, name:t.name,
       label:(PRINT_TYPES.has(S.type)?t.typography.print:t.typography.digital).label,
       bgHex, roles,
       stops: stops.length?stops:[],
-      themeObj:{...t,_roles:roles,_harmonyId:harm.id,colorStyle:t.colorStyle}
+      themeObj:{...t,_roles:roles,_harmonyId:harm.id,colorStyle:t.colorStyle,_seed:domHex}
     }));}catch(e){console.error(t.id,e);}
   });
   el.appendChild(grid);
@@ -1734,7 +1861,6 @@ function buildThemes(){
 }
 
 function makeThemeCardEl({id,name,label,bgHex,roles,stops,themeObj}){
-  // Card preview: gradient from extracted stops if available, else flat bg
   const previewStyle=stops&&stops.length>=2
     ?`background:linear-gradient(135deg,${stops.slice(0,4).join(',')})`
     :`background:${bgHex}`;
@@ -1998,7 +2124,8 @@ function draw(){
   // Always recompute roles from current bg + image hue — never use stale stored roles
   let roles=null;
   if(hasTheme){
-    roles=buildRoles(0, renderedBg, {...S.themeObj.colorStyle,_harmonyId:S.themeObj._harmonyId}, dominantImgHex||undefined);
+    const seedHex=S.themeObj._seed||dominantImgHex||undefined;
+    roles=buildRoles(0, renderedBg, {...S.themeObj.colorStyle,_harmonyId:S.themeObj._harmonyId}, seedHex);
   }
 
   // ── Typography ──
@@ -2260,3 +2387,6 @@ if('serviceWorker' in navigator){
 </script>
 </body>
 </html>
+
+
+
